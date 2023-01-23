@@ -110,16 +110,13 @@ resource "azurerm_virtual_machine" "default" {
   tags                             = module.labels.tags
 
   os_profile_linux_config {
-    # for_each = var.is_vm_linux && var.disable_password_authentication ? [1] : []
 
-    # content {
     disable_password_authentication = var.disable_password_authentication
 
     ssh_keys {
       key_data = var.public_key
       path     = "/home/${var.username}/.ssh/authorized_keys"
     }
-    # }
   }
 
   dynamic "boot_diagnostics" {

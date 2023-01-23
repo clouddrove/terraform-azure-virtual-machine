@@ -169,11 +169,6 @@ module "virtual-machine" {
       disk_size_gb         = 128
       storage_account_type = "StandardSSD_LRS"
     }
-    # ,{
-    #   name                 = "disk2"
-    #   disk_size_gb         = 200
-    #   storage_account_type = "Standard_LRS"
-    # }
   ]
 
   # Deploy log analytics agents to virtual machine. 

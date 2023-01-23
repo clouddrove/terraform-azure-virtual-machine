@@ -23,7 +23,6 @@ output "public_ip_address" {
   description = "The IP address value that was allocated."
 }
 
-
 output "virtual_machine_id" {
   value       = join("", azurerm_virtual_machine.default.*.id)
   description = "The ID of the Virtual Machine."

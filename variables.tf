@@ -815,6 +815,7 @@ variable "network_security_group_id" {
   default     = ""
   description = "The ID of the Network Security Group which should be attached to the Network Interface."
 }
+
 variable "blob_endpoint" {
   type        = string
   default     = ""

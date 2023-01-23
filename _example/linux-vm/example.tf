@@ -55,6 +55,7 @@ module "subnet" {
 module "security_group" {
   source  = "clouddrove/network-security-group/azure"
   version = "1.0.0"
+
   ## Tags
   name        = "app"
   environment = "test"
@@ -64,6 +65,7 @@ module "security_group" {
   resource_group_name     = module.resource_group.resource_group_name
   resource_group_location = module.resource_group.resource_group_location
   subnet_ids              = module.subnet.default_subnet_id
+  
   ##Security Group rule for Custom port.
   inbound_rules = [
     {
