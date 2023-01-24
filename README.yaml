@@ -32,7 +32,7 @@ include:
 # How to use this project
 usage: |-
   Here are some examples of how you can use this module in your inventory structure:
-  ### Linux Virtual Machine
+  ### Default vnet-peering
   ```hcl
     module "virtual-machine" {
     source                         = "clouddrove/virtual-machine/azure"
