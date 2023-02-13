@@ -6,7 +6,7 @@ module "resource_group" {
   source  = "clouddrove/resource-group/azure"
   version = "1.0.0"
 
-  name        = "app-vm"
+  name        = "app-test-vm"
   environment = "test"
   label_order = ["name", "environment"]
   location    = "Canada Central"
@@ -85,7 +85,7 @@ module "key_vault" {
   depends_on = [
     module.resource_group
   ]
-  name                        = "app"
+  name                        = "app13-test13"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
   resource_group_name         = module.resource_group.resource_group_name
@@ -98,7 +98,7 @@ module "key_vault" {
   enable_private_endpoint = true
   ##RBAC
   enable_rbac_authorization = true
-  principal_id              = ["c2f1e13d-XXXXXXXXXXXXXc99470c43"]
+  principal_id              = ["c2f......................3"]
   role_definition_name      = ["Key Vault Administrator"]
 }
 
@@ -144,7 +144,7 @@ module "virtual-machine" {
   ## Virtual Machine
 
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa AAAAB3vjLH685+lPLPRuOY3w3OJ3j+dfBbw1A5NqbvGTFlJ6Dh4/229ggycTUfujXlPdc3EyuRQ1nR85vrYmTpnPEetAq2eekxS9+c1pwqoFjWt9VCDV5iSPLCIZ+EegQwAdidYi1QusEXaQ4C+31ZAm3YfgYmHEvApS52pAyNM2vqgqI+Iepig781Rma10sfaNGspMERNc5SU28rqFdogeZmpAxUlEu4kZh1DOw+Q4DnREV4eL4ydSLtnj36GFIdGN8TwG5wOPyARjGzthEAVZquz8bN7fTp61zODfpNfwshhPMRmL19kLHk95rdKgDIRtcy/NNebJtM8ZgTulakyundEPQDQoM1GGrg1EWMbM6aHNDEL6vUbZa0TLCwus2JrMIBqS7yg76uE3gvrOu5KEQnWZBWr0eWWygwBTZL2f1hGQKQVy7M+9Upl44WgziiS/3JSo0GS5m9CWcbqbKCcnlMgOMkP2VyXQW1h+/FagwMa1E2B32uZpTJAkzmX3sPREHDXOjA6HbAXTF1t4HMsuLbcEWiHjnOFKfCll5EFwQeJ6iZcpKaSrQcZWQ7sHEXL1NcSyw== chopra13arhit@gmail.com" # Enter valid public key here
+  public_key     = "ssh-rsa 4HMsuLbQeJ6ig................== " # Enter valid public key here
   admin_username = "ubuntu"
   # admin_password                = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching                         = "ReadWrite"
