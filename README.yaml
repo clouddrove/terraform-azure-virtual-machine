@@ -38,57 +38,72 @@ usage: |-
     source                         = "clouddrove/virtual-machine/azure"
     version                        = "1.0.0"
     name        = "app"
-  environment = "test"
-  label_order = ["environment", "name"]
+    environment = "test"
+    label_order = ["environment", "name"]
 
-  ## Common
-  is_vm_linux       = true
-  enabled             = true
-  machine_count       = 1
-  resource_group_name = module.resource_group.resource_group_name
-  location            = module.resource_group.resource_group_location
-  disable_password_authentication = true
+    ## Common
+    is_vm_linux       = true
+    enabled             = true
+    machine_count       = 1
+    resource_group_name = module.resource_group.resource_group_name
+    location            = module.resource_group.resource_group_location
+    disable_password_authentication = true
 
-  ## Network Interface
-  subnet_id                     = module.subnet.default_subnet_id
-  private_ip_address_version    = "IPv4"
-  private_ip_address_allocation = "Static"
-  primary                       = true
-  private_ip_addresses          = ["10.0.1.4"]
-  #nsg
-  network_interface_sg_enabled = true
-  network_security_group_id    = module.security_group.id
+    ## Network Interface
+    subnet_id                     = module.subnet.default_subnet_id
+    private_ip_address_version    = "IPv4"
+    private_ip_address_allocation = "Static"
+    primary                       = true
+    private_ip_addresses          = ["10.0.1.4"]
+    #nsg
+    network_interface_sg_enabled = true
+    network_security_group_id    = module.security_group.id
 
-  ## Availability Set
-  availability_set_enabled     = true
-  platform_update_domain_count = 7
-  platform_fault_domain_count  = 3
+    ## Availability Set
+    availability_set_enabled     = true
+    platform_update_domain_count = 7
+    platform_fault_domain_count  = 3
 
-  ## Public IP
-  public_ip_enabled = true
-  sku               = "Basic"
-  allocation_method = "Static"
-  ip_version        = "IPv4"
+    ## Public IP
+    public_ip_enabled = true
+    sku               = "Basic"
+    allocation_method = "Static"
+    ip_version        = "IPv4"
 
 
-  ## Virtual Machine
-  linux_enabled                   = true
-  vm_size                         = "Standard_B1s"
-  public_key                      = "ssh-rsa AAAAB3NzaC1yc2EoL9X+2+4Xb dev" # Enter valid public key here
-  username                        = "ubuntu"
-  os_profile_enabled              = true
-  admin_username                  = "ubuntu"
-  # admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
-  create_option                   = "FromImage"
-  caching                         = "ReadWrite"
-  disk_size_gb                    = 30
-  os_type                         = "Linux"
-  managed_disk_type               = "Standard_LRS"
-  storage_image_reference_enabled = true
-  image_publisher                 = "Canonical"
-  image_offer                     = "0001-com-ubuntu-server-focal"
-  image_sku                       = "20_04-lts"
-  image_version                   = "latest"
+    ## Virtual Machine
+    vm_size                         = "Standard_B1s"
+    public_key                      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCo0vgHNoVaTcSn9+go0GK8r98EDAGvjLH685+lPLPRuOY3w3OJf8B/wtTPIwC2RoCt0Jalc5ITXUtnPw/IEFNyOCN3j+dfBbw1A5NqbvGTFl3zZyCXWil2ek+5pGtSf75BJ6Dh4/229nkvlYy8WTA2Lswm0Ds6rTUfujXlPdc3EyuRQ1nR85vrYmTpnPEetAq2eekxS9+c1pwqoFjWt9VCDV5iSPLCIZ+EegQwAdidYi1QusEXaQ4C+31ZAm3YfgYmHEvApS52pAyNM2vqgqI+Iepig781Rma10sfaNGspMERNc5SU28rqFdogeZmpAxUlEu4kZh1DOw+Q4DnREV4eL4ydSLtnj36GFIdGN8TwG5wOPyARjGzthEAVZquz8bN7fTp61zODfpNfwshhPMRmL19kLHk95rdKgDIRtcy/NNebJtM8ZgTulakyundEPQDQoM1GGrg1EWMbM6aHNDEL6vUbZa0TLCwus2JrMIBqS7yg76uE3gvrOu5KEQnWZBWr0eWWygwBTZL2f1hGQKQVy7M+9Upl44WgziiS/3JSo0GS5m9CWcbqbKCcnlMgOMkP2VyXQW1h+/FagwMa1E2B32uZpTJAkzmX3sPREHDXOjA6HbAXTF1t4HMsuLbcEWiHjnOFKfCll5EFwQeJ6iZcpKaSrQcZWQ7sHEXL1NcSyw== chopra13arhit@gmail.com" # Enter valid public key here
+    admin_username                  = "ubuntu"
+    # admin_password                = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
+    caching                         = "ReadWrite"
+    disk_size_gb                    = 30
+    os_type                         = "Linux"
+    disk_encryption_set_id          = module.virtual-machine.disk_encryption_set-id
+    storage_image_reference_enabled = true
+    image_publisher                 = "Canonical"
+    image_offer                     = "0001-com-ubuntu-server-focal"
+    image_sku                       = "20_04-lts"
+    image_version                   = "latest"
+
+
+    enable_disk_encryption_set = true
+    key_vault_id               = module.key_vault.id
+    key_vault_key_id           = module.virtual-machine.key_id
+
+    data_disks = [
+      {
+        name                 = "disk1"
+        disk_size_gb         = 100
+        storage_account_type = "StandardSSD_LRS"
+      },
+      {
+        name                 = "disk2"
+        disk_size_gb         = 200
+        storage_account_type = "Standard_LRS"
+      }
+    ]
+
   }
   ```
   ### Windows Virtual Machine
@@ -97,63 +112,63 @@ usage: |-
     source                         = "clouddrove/virtual-machine/azure"
     version                        = "1.0.0"
     name        = "app"
-  environment = "test"
-  label_order = ["environment", "name"]
+    environment = "test"
+    label_order = ["environment", "name"]
 
-  ## Common
-  is_vm_windows                   = true
-  enabled                         = true
-  machine_count                   = 1
-  resource_group_name             = module.resource_group.resource_group_name
-  location                        = module.resource_group.resource_group_location
-  disable_password_authentication = false
-  create_option                   = "FromImage"
-  disk_size_gb                    = 128
-  
-
-  ## Network Interface
-  subnet_id                     = module.subnet.default_subnet_id
-  private_ip_address_version    = "IPv4"
-  private_ip_address_allocation = "Static"
-  primary                       = true
-  private_ip_addresses          = ["10.0.1.4"]
-  #nsg
-  network_interface_sg_enabled = true
-  network_security_group_id    = module.security_group.id
-
-  ## Availability Set
-  availability_set_enabled     = true
-  platform_update_domain_count = 7
-  platform_fault_domain_count  = 3
-
-  ## Public IP
-  public_ip_enabled = true
-  sku               = "Basic"
-  allocation_method = "Static"
-  ip_version        = "IPv4"
+    ## Common
+    is_vm_windows                   = true
+    enabled                         = true
+    machine_count                   = 1
+    resource_group_name             = module.resource_group.resource_group_name
+    location                        = module.resource_group.resource_group_location
+    disable_password_authentication = false
+    create_option                   = "FromImage"
+    disk_size_gb                    = 128
 
 
-  os_type = "windows"
-  computer_name="app-win-comp"
+    ## Network Interface
+    subnet_id                     = module.subnet.default_subnet_id
+    private_ip_address_version    = "IPv4"
+    private_ip_address_allocation = "Static"
+    primary                       = true
+    private_ip_addresses          = ["10.0.1.4"]
+    #nsg
+    network_interface_sg_enabled = true
+    network_security_group_id    = module.security_group.id
 
-  # windows_distribution_name = "windows2019dc"
-  vm_size         = "Standard_B1s"
-  admin_username  = "azureadmin"
-  admin_password  = "Password@123"
-  image_publisher = "MicrosoftWindowsServer"
-  image_offer     = "WindowsServer"
-  image_sku       = "2019-Datacenter"
-  image_version   = "latest"
+    ## Availability Set
+    availability_set_enabled     = true
+    platform_update_domain_count = 7
+    platform_fault_domain_count  = 3
+
+    ## Public IP
+    public_ip_enabled = true
+    sku               = "Basic"
+    allocation_method = "Static"
+    ip_version        = "IPv4"
 
 
-  enable_boot_diagnostics = false #Default is false 
+    os_type = "windows"
+    computer_name="app-win-comp"
 
-  data_disks = [
-    {
-      name                 = "disk1"
-      disk_size_gb         = 128
-      storage_account_type = "StandardSSD_LRS"
-    }
-  ]
+    # windows_distribution_name = "windows2019dc"
+    vm_size         = "Standard_B1s"
+    admin_username  = "azureadmin"
+    admin_password  = "Password@123"
+    image_publisher = "MicrosoftWindowsServer"
+    image_offer     = "WindowsServer"
+    image_sku       = "2019-Datacenter"
+    image_version   = "latest"
+
+
+    enable_boot_diagnostics = false #Default is false
+
+    data_disks = [
+      {
+        name                 = "disk1"
+        disk_size_gb         = 128
+        storage_account_type = "StandardSSD_LRS"
+      }
+    ]
   }
   ```

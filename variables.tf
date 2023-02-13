@@ -169,7 +169,7 @@ variable "platform_fault_domain_count" {
 
 variable "proximity_placement_group_id" {
   type        = string
-  default     = ""
+  default     = null
   description = "The ID of the Proximity Placement Group to which this Virtual Machine should be assigned."
 }
 
@@ -582,7 +582,7 @@ variable "ultra_ssd_enabled" {
   description = "Should Ultra SSD disk be enabled for this Virtual Machine?."
 }
 
-variable "vm_type" {
+variable "vm_identity_type" {
   type        = string
   default     = ""
   description = "The Managed Service Identity Type of this Virtual Machine. Possible values are SystemAssigned and UserAssigned."
@@ -734,15 +734,7 @@ variable "managed_disk_id" {
   description = "Specifies the ID of an existing Managed Disk which should be attached as the OS Disk of this Virtual Machine. If this is set then the create_option must be set to Attach."
 }
 
-variable "data_disks" {
-  description = "Managed Data Disks for azure viratual machine"
-  type = list(object({
-    name                 = string
-    storage_account_type = string
-    disk_size_gb         = number
-  }))
-  default = []
-}
+
 
 variable "managed_disk_type" {
   type        = string
@@ -829,7 +821,56 @@ variable "ddos_protection_mode" {
 
 variable "public_key" {
   type        = string
-  default     = ""
+  default     = null
   description = "Name  (e.g. `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQ`)."
   sensitive   = true
 }
+
+variable "vm_availability_zone" {
+  description = "The Zone in which this Virtual Machine should be created. Conflicts with availability set and shouldn't use both"
+  default     = null
+}
+
+variable "key_vault_key_id" {
+  type    = any
+  default = null
+}
+
+variable "enable_disk_encryption_set" {
+  type    = bool
+  default = false
+}
+
+variable "key_vault_id" {
+  type    = any
+  default = null
+}
+
+variable "enable_encryption_at_host" {
+  type        = bool
+  default     = false
+  description = "Flag to control Disk Encryption at host level"
+}
+
+variable "data_disks" {
+  description = "Managed Data Disks for azure virtual machine"
+  type = list(object({
+    name                 = string
+    storage_account_type = string
+    disk_size_gb         = number
+  }))
+  default = []
+}
+
+variable "key_vault_rbac_auth_enabled" {
+  description = "Flag to state whether rbac authorization is used in key vault or access policy."
+  type        = bool
+  default     = true
+}
+
+
+
+
+
+
+

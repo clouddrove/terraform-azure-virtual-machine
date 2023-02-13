@@ -25,7 +25,7 @@ output "public_ip_address" {
 
 
 output "virtual_machine_id" {
-  value       = join("", azurerm_virtual_machine.default.*.id)
+  value       = join("", azurerm_linux_virtual_machine.default.*.id)
   description = "The ID of the Virtual Machine."
 }
 
@@ -38,4 +38,13 @@ output "network_interface_sg_association_id" {
 output "tags" {
   value       = module.labels.tags
   description = "The tags associated to resources."
+}
+
+output "disk_encryption_set-id" {
+  value = join("", azurerm_disk_encryption_set.example.*.id)
+}
+
+output "key_id" {
+  value       = join("", azurerm_key_vault_key.example.*.id)
+  description = "Id of key that is to be used for encrypting "
 }
