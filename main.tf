@@ -104,6 +104,9 @@ resource "azurerm_public_ip" "default" {
 #Module      : LINUX VIRTUAL MACHINE
 #Description : Terraform resource to create a linux virtual machine.
 resource "azurerm_linux_virtual_machine" "default" {
+  depends_on = [
+    azurerm_role_assignment.azurerm_disk_encryption_set_key_vault_access
+  ]
   count                           = var.is_vm_linux ? var.machine_count : 0
   name                            = format("%s-virtual-machine-%s", module.labels.id, count.index + 1)
   resource_group_name             = var.resource_group_name
@@ -362,6 +365,9 @@ resource "azurerm_key_vault_access_policy" "main" {
 
 #Data Disks
 resource "azurerm_managed_disk" "data_disk" {
+  depends_on = [
+    azurerm_role_assignment.azurerm_disk_encryption_set_key_vault_access
+  ]
   for_each = { for it, data_disk in var.data_disks : data_disk.name => {
     it : it,
     data_disk : data_disk,
