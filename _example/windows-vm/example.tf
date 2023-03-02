@@ -181,4 +181,20 @@ module "virtual-machine" {
   # deploy_log_analytics_agent                 = true
   # log_analytics_customer_id                  = data.azurerm_log_analytics_workspace.example.workspace_id
   # log_analytics_workspace_primary_shared_key = data.azurerm_log_analytics_workspace.example.primary_shared_key
+
+  # Extension
+
+  is_extension_enabled   = true
+  extension_publisher    = "Microsoft.Azure.Extensions"
+  extension_type         = "CustomScript"
+  extension_type_handler = "2.0"
+  settings               = <<SETTINGS
+  {
+        "commandToExecute": "hostname && uptime"
+  }
+  SETTINGS
+
+  ## protected_settings = <<PROTECTED_SETTINGS
+  # map values here
+  # PROTECTED_SETTINGS
 }

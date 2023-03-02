@@ -144,7 +144,7 @@ module "virtual-machine" {
   ## Virtual Machine
 
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa <public_key_content> ==" # Enter valid public key here
+  public_key     = "ssh-rsa <enter_valid_public_key_here>" # Enter valid public key here
   admin_username = "ubuntu"
   # admin_password                = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching      = "ReadWrite"
@@ -168,12 +168,28 @@ module "virtual-machine" {
       name                 = "disk1"
       disk_size_gb         = 100
       storage_account_type = "StandardSSD_LRS"
-    },
-    {
-      name                 = "disk2"
-      disk_size_gb         = 200
-      storage_account_type = "Standard_LRS"
     }
+    # ,{
+    #   name                 = "disk2"
+    #   disk_size_gb         = 200
+    #   storage_account_type = "Standard_LRS"
+    # }
   ]
+
+  # Extension
+
+  is_extension_enabled   = true
+  extension_publisher    = "Microsoft.Azure.Extensions"
+  extension_type         = "CustomScript"
+  extension_type_handler = "2.0"
+  settings               = <<SETTINGS
+  {
+        "commandToExecute": "hostname && uptime"
+  }
+  SETTINGS
+
+  ## protected_settings = <<PROTECTED_SETTINGS
+  # map values here
+  # PROTECTED_SETTINGS
 
 }
