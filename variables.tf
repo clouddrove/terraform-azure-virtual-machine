@@ -613,7 +613,7 @@ variable "source_image_id" {
 
 variable "admin_password" {
   type        = string
-  default     = ""
+  default     = null
   description = "The password associated with the local administrator account."
 }
 
@@ -868,9 +868,49 @@ variable "key_vault_rbac_auth_enabled" {
   default     = true
 }
 
+# Extensions
 
+variable "is_extension_enabled" {
+  type        = bool
+  default     = false
+  description = "Set this value as true to create the virtual machine extension."
+}
 
+variable "extension_virtual_machine_id" {
+  type    = string
+  default = null
+  description = "Set the id of the virtual machine for the extension."
+}
 
+variable "extension_publisher" {
+  type    = string
+  default = null
+  description = "Set the publisher of the extension for the Virtual Machine."
+}
 
+variable "extension_type" {
+  type    = string
+  default = null
+  description = "Set the Type of extension for the Virtual Machine."
+}
 
+variable "extension_type_handler" {
+  type    = string
+  default = null
+  description = "Set the Type handler version of extension for the Virtual Machine."
+}
 
+variable "auto_upgrade_minor_version" {
+  type    = bool
+  default = false
+  description = "Set the true to auto upgrade the monor version of the extension."
+}
+
+variable "settings" {
+  description = "The settings passed to the extension, these are specified as a JSON object in a string."
+}
+
+variable "protected_settings" {
+  default = null
+  description = "The protected_settings passed to the extension, like settings, these are specified as a JSON object in a string."
+}

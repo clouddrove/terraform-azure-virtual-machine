@@ -80,27 +80,27 @@ module "security_group" {
 
 }
 
-module "key_vault" {
-  source = "clouddrove/key-vault/azure"
-  depends_on = [
-    module.resource_group
-  ]
-  name                        = "app13-test13"
-  environment                 = "test"
-  label_order                 = ["name", "environment", ]
-  resource_group_name         = module.resource_group.resource_group_name
-  purge_protection_enabled    = true
-  enabled_for_disk_encryption = true
-  sku_name                    = "standard"
-  subnet_id                   = module.subnet.default_subnet_id[0]
-  virtual_network_id          = module.vnet.vnet_id[0]
-  #private endpoint
-  enable_private_endpoint = true
-  ##RBAC
-  enable_rbac_authorization = true
-  principal_id              = ["c2#################3"]
-  role_definition_name      = ["Key Vault Administrator"]
-}
+# module "key_vault" {
+#   source = "clouddrove/key-vault/azure"
+#   depends_on = [
+#     module.resource_group
+#   ]
+#   name                        = "app13-test13"
+#   environment                 = "test"
+#   label_order                 = ["name", "environment", ]
+#   resource_group_name         = module.resource_group.resource_group_name
+#   purge_protection_enabled    = true
+#   enabled_for_disk_encryption = true
+#   sku_name                    = "standard"
+#   subnet_id                   = module.subnet.default_subnet_id[0]
+#   virtual_network_id          = module.vnet.vnet_id[0]
+#   #private endpoint
+#   enable_private_endpoint = true
+#   ##RBAC
+#   enable_rbac_authorization = true
+#   principal_id              = ["c2#################3"]
+#   role_definition_name      = ["Key Vault Administrator"]
+# }
 
 
 module "virtual-machine" {
@@ -144,7 +144,7 @@ module "virtual-machine" {
   ## Virtual Machine
 
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa <public_key_content> ==" # Enter valid public key here
+  public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiGNZewuQKwr9XZPfnejPxafa1XcrvZBIkk1lwsfbITHlOSvSkB9xLsCwbMaPDxYsFi43DlcCQPrYSUiwRktphmiKfYWKAxSarlNiY74NNo7RpIN3znLK5fWD5hB6VRol5x0Et0QmT5RoGvOCVx88ZCl/87V/IqHFbtIYvhVc6bpqOURB2KOjysYz+ZkHM38tw9d+0L8NC9qxw603T4Q8HFPG9BFrlAsg4J5NUeypy66dyb6mVqGSXQHewhvpthxzX9GYC7n24YRvGhq/0o067BX2dkAoiO4G+bIphk6o5cLN8jXrYOkfo26BseGd9TQuQX05c8huMfVoL9X+2+4Xb dev" # Enter valid public key here
   admin_username = "ubuntu"
   # admin_password                = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching      = "ReadWrite"
@@ -158,22 +158,38 @@ module "virtual-machine" {
   image_version                   = "latest"
 
 
-  enable_disk_encryption_set = true
-  key_vault_id               = module.key_vault.id
+  enable_disk_encryption_set = false
+  # key_vault_id               = module.key_vault.id
   key_vault_key_id           = module.virtual-machine.key_id
-  enable_encryption_at_host  = true
+  enable_encryption_at_host  = false
 
   data_disks = [
     {
       name                 = "disk1"
       disk_size_gb         = 100
       storage_account_type = "StandardSSD_LRS"
-    },
-    {
-      name                 = "disk2"
-      disk_size_gb         = 200
-      storage_account_type = "Standard_LRS"
     }
+    # ,{
+    #   name                 = "disk2"
+    #   disk_size_gb         = 200
+    #   storage_account_type = "Standard_LRS"
+    # }
   ]
+
+  # Extension
+
+  is_extension_enabled = true
+  extension_publisher = "Microsoft.Azure.Extensions"
+  extension_type = "CustomScript"
+  extension_type_handler = "2.0"
+  settings = <<SETTINGS
+  {
+        "commandToExecute": "hostname && uptime"
+  }
+  SETTINGS
+
+## protected_settings = <<PROTECTED_SETTINGS
+          # map values here
+# PROTECTED_SETTINGS
 
 }

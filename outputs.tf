@@ -53,3 +53,8 @@ output "key_id" {
   value       = join("", azurerm_key_vault_key.example.*.id)
   description = "Id of key that is to be used for encrypting "
 }
+
+output "extension_id" {
+  value       = join("", azurerm_virtual_machine_extension.vm_insight_monitor_agent.*.id)
+  description = "The ID of the Virtual Machine Extension."
+}
