@@ -144,7 +144,7 @@ module "virtual-machine" {
   ## Virtual Machine
 
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCiGNZewuQKwr9XZPfnejPxafa1XcrvZBIkk1lwsfbITHlOSvSkB9xLsCwbMaPDxYsFi43DlcCQPrYSUiwRktphmiKfYWKAxSarlNiY74NNo7RpIN3znLK5fWD5hB6VRol5x0Et0QmT5RoGvOCVx88ZCl/87V/IqHFbtIYvhVc6bpqOURB2KOjysYz+ZkHM38tw9d+0L8NC9qxw603T4Q8HFPG9BFrlAsg4J5NUeypy66dyb6mVqGSXQHewhvpthxzX9GYC7n24YRvGhq/0o067BX2dkAoiO4G+bIphk6o5cLN8jXrYOkfo26BseGd9TQuQX05c8huMfVoL9X+2+4Xb dev" # Enter valid public key here
+  public_key     = "ssh-rsa <enter_valid_public_key_here>" # Enter valid public key here
   admin_username = "ubuntu"
   # admin_password                = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching      = "ReadWrite"
