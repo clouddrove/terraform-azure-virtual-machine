@@ -402,7 +402,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 
 resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
   count                      = var.is_extension_enabled == true ? 1 : 0
-  name                       = "vm-extension-${var.name}"
+  name                       = format("%s-vm-extension", module.labels.id)
   virtual_machine_id         = var.is_vm_linux != true ? azurerm_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
   publisher                  = var.extension_publisher
   type                       = var.extension_type
