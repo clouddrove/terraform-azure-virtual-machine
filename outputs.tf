@@ -25,7 +25,7 @@ output "public_ip_address" {
 
 
 output "virtual_machine_id" {
-  value       = join("", azurerm_linux_virtual_machine.default.*.id)
+  value       = azurerm_linux_virtual_machine.default.*.id != null ? join("", azurerm_linux_virtual_machine.default.*.id) : join("", azurerm_virtual_machine.default.*.id) 
   description = "The ID of the Virtual Machine."
 }
 
