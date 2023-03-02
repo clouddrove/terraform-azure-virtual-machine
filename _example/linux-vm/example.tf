@@ -80,27 +80,27 @@ module "security_group" {
 
 }
 
-# module "key_vault" {
-#   source = "clouddrove/key-vault/azure"
-#   depends_on = [
-#     module.resource_group
-#   ]
-#   name                        = "app13-test13"
-#   environment                 = "test"
-#   label_order                 = ["name", "environment", ]
-#   resource_group_name         = module.resource_group.resource_group_name
-#   purge_protection_enabled    = true
-#   enabled_for_disk_encryption = true
-#   sku_name                    = "standard"
-#   subnet_id                   = module.subnet.default_subnet_id[0]
-#   virtual_network_id          = module.vnet.vnet_id[0]
-#   #private endpoint
-#   enable_private_endpoint = true
-#   ##RBAC
-#   enable_rbac_authorization = true
-#   principal_id              = ["c2#################3"]
-#   role_definition_name      = ["Key Vault Administrator"]
-# }
+module "key_vault" {
+  source = "clouddrove/key-vault/azure"
+  depends_on = [
+    module.resource_group
+  ]
+  name                        = "app13-test13"
+  environment                 = "test"
+  label_order                 = ["name", "environment", ]
+  resource_group_name         = module.resource_group.resource_group_name
+  purge_protection_enabled    = true
+  enabled_for_disk_encryption = true
+  sku_name                    = "standard"
+  subnet_id                   = module.subnet.default_subnet_id[0]
+  virtual_network_id          = module.vnet.vnet_id[0]
+  #private endpoint
+  enable_private_endpoint = true
+  ##RBAC
+  enable_rbac_authorization = true
+  principal_id              = ["c2#################3"]
+  role_definition_name      = ["Key Vault Administrator"]
+}
 
 
 module "virtual-machine" {
@@ -158,10 +158,10 @@ module "virtual-machine" {
   image_version                   = "latest"
 
 
-  enable_disk_encryption_set = false
-  # key_vault_id               = module.key_vault.id
+  enable_disk_encryption_set = true
+  key_vault_id               = module.key_vault.id
   key_vault_key_id           = module.virtual-machine.key_id
-  enable_encryption_at_host  = false
+  enable_encryption_at_host  = true
 
   data_disks = [
     {
@@ -178,18 +178,18 @@ module "virtual-machine" {
 
   # Extension
 
-  is_extension_enabled = true
-  extension_publisher = "Microsoft.Azure.Extensions"
-  extension_type = "CustomScript"
+  is_extension_enabled   = true
+  extension_publisher    = "Microsoft.Azure.Extensions"
+  extension_type         = "CustomScript"
   extension_type_handler = "2.0"
-  settings = <<SETTINGS
+  settings               = <<SETTINGS
   {
         "commandToExecute": "hostname && uptime"
   }
   SETTINGS
 
-## protected_settings = <<PROTECTED_SETTINGS
-          # map values here
-# PROTECTED_SETTINGS
+  ## protected_settings = <<PROTECTED_SETTINGS
+  # map values here
+  # PROTECTED_SETTINGS
 
 }

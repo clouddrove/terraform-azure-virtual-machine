@@ -877,32 +877,32 @@ variable "is_extension_enabled" {
 }
 
 variable "extension_virtual_machine_id" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
   description = "Set the id of the virtual machine for the extension."
 }
 
 variable "extension_publisher" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
   description = "Set the publisher of the extension for the Virtual Machine."
 }
 
 variable "extension_type" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
   description = "Set the Type of extension for the Virtual Machine."
 }
 
 variable "extension_type_handler" {
-  type    = string
-  default = null
+  type        = string
+  default     = null
   description = "Set the Type handler version of extension for the Virtual Machine."
 }
 
 variable "auto_upgrade_minor_version" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
   description = "Set the true to auto upgrade the monor version of the extension."
 }
 
@@ -911,6 +911,6 @@ variable "settings" {
 }
 
 variable "protected_settings" {
-  default = null
+  default     = null
   description = "The protected_settings passed to the extension, like settings, these are specified as a JSON object in a string."
 }

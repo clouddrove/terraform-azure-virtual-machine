@@ -184,17 +184,17 @@ module "virtual-machine" {
 
   # Extension
 
-  is_extension_enabled = true
-  extension_publisher = "Microsoft.Azure.Extensions"
-  extension_type = "CustomScript"
+  is_extension_enabled   = true
+  extension_publisher    = "Microsoft.Azure.Extensions"
+  extension_type         = "CustomScript"
   extension_type_handler = "2.0"
-  settings = <<SETTINGS
+  settings               = <<SETTINGS
   {
         "commandToExecute": "hostname && uptime"
   }
   SETTINGS
 
-## protected_settings = <<PROTECTED_SETTINGS
-          # map values here
-# PROTECTED_SETTINGS
+  ## protected_settings = <<PROTECTED_SETTINGS
+  # map values here
+  # PROTECTED_SETTINGS
 }
