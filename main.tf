@@ -120,6 +120,9 @@ resource "azurerm_linux_virtual_machine" "default" {
   availability_set_id             = join("", azurerm_availability_set.default.*.id)
   proximity_placement_group_id    = var.proximity_placement_group_id
   encryption_at_host_enabled      = var.enable_encryption_at_host
+  patch_assessment_mode           = "AutomaticByPlatform"
+  patch_mode                      = "AutomaticByPlatform"
+  provision_vm_agent              = true
 
 
   zone = var.vm_availability_zone

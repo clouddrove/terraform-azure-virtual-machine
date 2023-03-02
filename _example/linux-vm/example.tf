@@ -98,7 +98,7 @@ module "key_vault" {
   enable_private_endpoint = true
   ##RBAC
   enable_rbac_authorization = true
-  principal_id              = ["c2f......................3"]
+  principal_id              = ["c2#################3"]
   role_definition_name      = ["Key Vault Administrator"]
 }
 
@@ -144,12 +144,12 @@ module "virtual-machine" {
   ## Virtual Machine
 
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa 4HMsuLbQeJ6ig................== " # Enter valid public key here
+  public_key     = "ssh-rsa <public_key_content> ==" # Enter valid public key here
   admin_username = "ubuntu"
   # admin_password                = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
-  caching                         = "ReadWrite"
-  disk_size_gb                    = 30
-  os_type                         = "Linux"
+  caching      = "ReadWrite"
+  disk_size_gb = 30
+
   disk_encryption_set_id          = module.virtual-machine.disk_encryption_set-id
   storage_image_reference_enabled = true
   image_publisher                 = "Canonical"
