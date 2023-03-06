@@ -907,6 +907,7 @@ variable "auto_upgrade_minor_version" {
 }
 
 variable "settings" {
+  default     = null
   description = "The settings passed to the extension, these are specified as a JSON object in a string."
 }
 
