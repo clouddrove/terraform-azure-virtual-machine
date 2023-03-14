@@ -420,5 +420,67 @@ resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
 
 }
 
+resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
+  count                          = var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
+  name                           = format("%s-vm-pip-%s-diagnostic-log", module.labels.id, count.index + 1)
+  target_resource_id             = join("", azurerm_public_ip.default.*.id)
+  storage_account_id             = var.storage_account_id
+  eventhub_name                  = var.eventhub_name
+  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
+  log_analytics_workspace_id     = var.log_analytics_workspace_id
+  log_analytics_destination_type = var.log_analytics_destination_type
+  metric {
+    category = "AllMetrics"
+    enabled  = var.Metric_enable
+    retention_policy {
+      enabled = var.retention_policy_enabled
+      days    = var.days
+    }
+  }
+  log {
+    category       = var.category
+    category_group = "AllLogs"
+    retention_policy {
+      enabled = var.retention_policy_enabled
+      days    = var.diagnostic_log_days
+    }
+    enabled = var.log_enabled
+  }
+
+  log {
+    category       = var.category
+    category_group = "Audit"
+    retention_policy {
+      enabled = var.retention_policy_enabled
+      days    = var.diagnostic_log_days
+    }
+    enabled = var.log_enabled
+  }
+  lifecycle {
+    ignore_changes = [log_analytics_destination_type]
+  }
+}
+
+resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
+  count                          = var.diagnostic_setting_enable ? var.machine_count : 0
+  name                           = format("%s-network-interface-%s-diagnostic-log", module.labels.id, count.index + 1)
+  target_resource_id             = join("", azurerm_network_interface.default.*.id)
+  storage_account_id             = var.storage_account_id
+  eventhub_name                  = var.eventhub_name
+  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
+  log_analytics_workspace_id     = var.log_analytics_workspace_id
+  log_analytics_destination_type = var.log_analytics_destination_type
+  metric {
+    category = "AllMetrics"
+    enabled  = var.Metric_enable
+    retention_policy {
+      enabled = var.retention_policy_enabled
+      days    = var.days
+    }
+  }
+  lifecycle {
+    ignore_changes = [log_analytics_destination_type]
+  }
+}
 
 

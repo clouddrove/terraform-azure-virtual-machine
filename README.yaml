@@ -103,6 +103,9 @@ usage: |-
         storage_account_type = "Standard_LRS"
       }
     ]
+    #### enable diagnostic setting
+    diagnostic_setting_enable  = false
+    log_analytics_workspace_id = ""
 
   }
   ```
@@ -170,5 +173,8 @@ usage: |-
         storage_account_type = "StandardSSD_LRS"
       }
     ]
+    #### enable diagnostic setting
+    diagnostic_setting_enable  = false
+    log_analytics_workspace_id = ""
   }
   ```
