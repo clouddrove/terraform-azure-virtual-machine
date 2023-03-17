@@ -428,7 +428,7 @@ resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
     enabled  = var.Metric_enable
     retention_policy {
       enabled = var.retention_policy_enabled
-      days    = var.days
+      days    = var.diagnostic_log_days
     }
   }
   log {
