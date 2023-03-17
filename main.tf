@@ -401,22 +401,16 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 }
 
 resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
-  count                      = var.is_extension_enabled == true ? 1 : 0
-  name                       = format("%s-vm-extension", module.labels.id)
+  count                      = var.is_extension_enabled == true ? length(var.extension_publisher) : 0
+  name                       = var.extension_name[count.index]
   virtual_machine_id         = var.is_vm_linux != true ? azurerm_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
-  publisher                  = var.extension_publisher
-  type                       = var.extension_type
-  type_handler_version       = var.extension_type_handler
-  auto_upgrade_minor_version = var.auto_upgrade_minor_version
-
-  settings = var.settings
-  # <<SETTINGS
-  #   {
-  #     ${var.settings}
-  #   }
-  # SETTINGS
-
-  protected_settings = var.protected_settings
+  publisher                  = var.extension_publisher[count.index]
+  type                       = var.extension_type[count.index]
+  type_handler_version       = var.extension_type_handler[count.index]
+  auto_upgrade_minor_version = var.auto_upgrade_minor_version[count.index]
+  automatic_upgrade_enabled  = var.automatic_upgrade_enabled[count.index]
+  settings                   = var.settings[count.index]
+  protected_settings         = var.protected_settings[count.index]
 
 }
 
