@@ -877,32 +877,38 @@ variable "is_extension_enabled" {
 }
 
 variable "extension_virtual_machine_id" {
-  type        = string
+  type        = list(string)
   default     = null
   description = "Set the id of the virtual machine for the extension."
 }
 
 variable "extension_publisher" {
-  type        = string
+  type        = list(string)
   default     = null
   description = "Set the publisher of the extension for the Virtual Machine."
 }
 
+variable "extension_name" {
+  type        = list(string)
+  default     = null
+  description = "Name of the Extension."
+}
+
 variable "extension_type" {
-  type        = string
+  type        = list(string)
   default     = null
   description = "Set the Type of extension for the Virtual Machine."
 }
 
 variable "extension_type_handler" {
-  type        = string
+  type        = list(string)
   default     = null
   description = "Set the Type handler version of extension for the Virtual Machine."
 }
 
 variable "auto_upgrade_minor_version" {
-  type        = bool
-  default     = false
+  type        = list(bool)
+  default     = [false]
   description = "Set the true to auto upgrade the monor version of the extension."
 }
 
@@ -912,8 +918,15 @@ variable "settings" {
 }
 
 variable "protected_settings" {
-  default     = null
+  type = list(any)
+  # default     = []
   description = "The protected_settings passed to the extension, like settings, these are specified as a JSON object in a string."
+}
+
+variable "automatic_upgrade_enabled" {
+  type        = list(bool)
+  default     = [false]
+  description = "Set the true to auto upgrade the extension version."
 }
 
 #### enable diagnostic setting

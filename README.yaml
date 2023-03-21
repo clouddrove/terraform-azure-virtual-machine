@@ -107,6 +107,21 @@ usage: |-
     diagnostic_setting_enable  = false
     log_analytics_workspace_id = ""
 
+    ## Extensions
+    is_extension_enabled       = true
+    extension_name             = ["CustomScript"]
+    extension_publisher        = ["Microsoft.Azure.Extensions"]
+    extension_type             = ["CustomScript"]
+    extension_type_handler     = ["2.0"]
+    auto_upgrade_minor_version = [true]
+    automatic_upgrade_enabled  = [false]
+    settings                   = <<SETTINGS
+    {
+          "commandToExecute": "hostname && uptime"
+    }
+    SETTINGS
+    protected_settings         = [null]
+
   }
   ```
   ### Windows Virtual Machine
@@ -176,5 +191,20 @@ usage: |-
     #### enable diagnostic setting
     diagnostic_setting_enable  = false
     log_analytics_workspace_id = ""
+
+    ## Extensions
+    is_extension_enabled       = true
+    extension_name             = ["CustomScript"]
+    extension_publisher        = ["Microsoft.Azure.Extensions"]
+    extension_type             = ["CustomScript"]
+    extension_type_handler     = ["2.0"]
+    auto_upgrade_minor_version = [true]
+    automatic_upgrade_enabled  = [false]
+    settings                   = <<SETTINGS
+    {
+          "commandToExecute": "hostname && uptime"
+    }
+    SETTINGS
+    protected_settings         = [null]
   }
   ```
