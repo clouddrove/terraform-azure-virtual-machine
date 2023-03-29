@@ -184,7 +184,7 @@ resource "azurerm_linux_virtual_machine" "default" {
     name                      = format("%s-storage-os-disk", module.labels.id)
     storage_account_type      = var.os_disk_storage_account_type
     caching                   = var.caching
-    disk_encryption_set_id    = var.enable_disk_encryption_set ? var.disk_encryption_set_id : null
+    disk_encryption_set_id    = var.enable_disk_encryption_set ? azurerm_disk_encryption_set.example[0].id : null
     disk_size_gb              = var.disk_size_gb
     write_accelerator_enabled = var.write_accelerator_enabled
 
