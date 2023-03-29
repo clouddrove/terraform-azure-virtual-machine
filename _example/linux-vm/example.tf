@@ -150,7 +150,6 @@ module "virtual-machine" {
   caching      = "ReadWrite"
   disk_size_gb = 30
 
-  disk_encryption_set_id          = module.virtual-machine.disk_encryption_set-id
   storage_image_reference_enabled = true
   image_publisher                 = "Canonical"
   image_offer                     = "0001-com-ubuntu-server-focal"
@@ -158,10 +157,12 @@ module "virtual-machine" {
   image_version                   = "latest"
 
 
-  enable_disk_encryption_set = true
-  key_vault_id               = module.key_vault.id
-  key_vault_key_id           = module.virtual-machine.key_id
-  enable_encryption_at_host  = true
+  enable_disk_encryption_set     = true
+  key_vault_id                   = module.key_vault.id
+  addtional_capabilities_enabled = true
+  ultra_ssd_enabled              = false
+  enable_encryption_at_host      = true
+  key_vault_rbac_auth_enabled    = false
 
   data_disks = [
     {

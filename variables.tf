@@ -507,10 +507,6 @@ variable "os_disk_storage_account_type" {
   default     = "StandardSSD_LRS"
 }
 
-variable "disk_encryption_set_id" {
-  description = "The ID of the Disk Encryption Set which should be used to Encrypt this OS Disk. The Disk Encryption Set must have the `Reader` Role Assignment scoped on the Key Vault - in addition to an Access Policy to the Key Vault"
-  default     = null
-}
 
 variable "additional_unattend_content" {
   description = "The XML formatted content that is added to the unattend.xml file for the specified path and component."
@@ -829,11 +825,6 @@ variable "public_key" {
 variable "vm_availability_zone" {
   description = "The Zone in which this Virtual Machine should be created. Conflicts with availability set and shouldn't use both"
   default     = null
-}
-
-variable "key_vault_key_id" {
-  type    = any
-  default = null
 }
 
 variable "enable_disk_encryption_set" {
