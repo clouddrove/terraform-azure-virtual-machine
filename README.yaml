@@ -87,9 +87,12 @@ usage: |-
     image_version                   = "latest"
 
 
-    enable_disk_encryption_set = true
-    key_vault_id               = module.key_vault.id
-    key_vault_key_id           = module.virtual-machine.key_id
+    enable_disk_encryption_set     = true
+    key_vault_id                   = module.key_vault.id
+    addtional_capabilities_enabled = true
+    ultra_ssd_enabled              = false
+    enable_encryption_at_host      = true
+    key_vault_rbac_auth_enabled    = false
 
     data_disks = [
       {
