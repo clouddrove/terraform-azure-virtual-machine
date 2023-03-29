@@ -310,7 +310,7 @@ resource "azurerm_network_interface_security_group_association" "default" {
 
 resource "azurerm_disk_encryption_set" "example" {
   count               = var.enable_disk_encryption_set ? 1 : 0
-  name                = "des"
+  name                = format("vm-%s-dsk-encrpt", module.labels.id)
   resource_group_name = var.resource_group_name
   location            = var.location
   key_vault_key_id    = var.enable_disk_encryption_set ? join("", azurerm_key_vault_key.example.*.id) : null
@@ -384,7 +384,7 @@ resource "azurerm_managed_disk" "data_disk" {
   storage_account_type   = lookup(each.value.data_disk, "storage_account_type", "StandardSSD_LRS")
   create_option          = "Empty"
   disk_size_gb           = each.value.data_disk.disk_size_gb
-  disk_encryption_set_id = var.enable_disk_encryption_set ? var.disk_encryption_set_id : null
+  disk_encryption_set_id = azurerm_disk_encryption_set.example[0].id != "" ? azurerm_disk_encryption_set.example[0].id : null #var.enable_disk_encryption_set ? var.disk_encryption_set_id : null
 
 }
 
@@ -476,5 +476,3 @@ resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
     ignore_changes = [log_analytics_destination_type]
   }
 }
-
-
