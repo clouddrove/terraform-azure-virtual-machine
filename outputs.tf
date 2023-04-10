@@ -30,7 +30,7 @@ output "linux_virtual_machine_id" {
 }
 
 output "windows_virtual_machine_id" {
-  value       = join("", azurerm_virtual_machine.win_vm.*.id)
+  value       = join("", azurerm_windows_virtual_machine.win_vm.*.id)
   description = "The ID of the Windows Virtual Machine."
 }
 

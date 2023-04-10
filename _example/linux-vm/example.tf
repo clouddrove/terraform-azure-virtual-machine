@@ -186,12 +186,14 @@ module "virtual-machine" {
   extension_type_handler     = ["2.0"]
   auto_upgrade_minor_version = [true]
   automatic_upgrade_enabled  = [false]
-  settings                   = <<SETTINGS
+  settings = [<<SETTINGS
   {
         "commandToExecute": "hostname && uptime"
   }
   SETTINGS
-  protected_settings         = [null]
+  ]
+
+  protected_settings = [null]
 
   ## protected_settings = <<PROTECTED_SETTINGS
   # map values here

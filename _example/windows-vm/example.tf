@@ -104,14 +104,14 @@ module "virtual-machine" {
   label_order = ["environment", "name"]
 
   ## Common
-  is_vm_windows                   = true
-  enabled                         = true
-  machine_count                   = 1
-  resource_group_name             = module.resource_group.resource_group_name
-  location                        = module.resource_group.resource_group_location
-  disable_password_authentication = false
-  create_option                   = "FromImage"
-  disk_size_gb                    = 128
+  is_vm_windows       = true
+  enabled             = true
+  machine_count       = 1
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.resource_group_location
+  create_option       = "Empty"
+  disk_size_gb        = 128
+  provision_vm_agent  = true
 
 
   ## Network Interface
@@ -152,6 +152,7 @@ module "virtual-machine" {
   image_offer     = "WindowsServer"
   image_sku       = "2019-Datacenter"
   image_version   = "latest"
+  caching         = "ReadWrite"
 
 
   # Boot diagnostics to troubleshoot virtual machines, by default uses managed
@@ -184,19 +185,20 @@ module "virtual-machine" {
 
   # Extension
 
-  is_extension_enabled       = true
+  is_extension_enabled       = false
   extension_name             = ["CustomScript"]
   extension_publisher        = ["Microsoft.Azure.Extensions"]
   extension_type             = ["CustomScript"]
   extension_type_handler     = ["2.0"]
   auto_upgrade_minor_version = [true]
   automatic_upgrade_enabled  = [false]
-  settings                   = <<SETTINGS
+  settings = [<<SETTINGS
   {
         "commandToExecute": "hostname && uptime"
   }
   SETTINGS
-  protected_settings         = [null]
+  ]
+  protected_settings = [null]
 
   ## protected_settings = <<PROTECTED_SETTINGS
   # map values here
