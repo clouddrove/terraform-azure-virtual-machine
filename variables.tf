@@ -91,6 +91,12 @@ variable "delete" {
   description = "Used when deleting the Resource Group."
 }
 
+variable "vm_addon_name" {
+  type        = string
+  default     = null
+  description = "The name of the addon Virtual machine's name."
+}
+
 ## Network Interface
 
 variable "dns_servers" {
@@ -599,7 +605,8 @@ variable "os_profile_enabled" {
 variable "admin_username" {
   type        = string
   default     = ""
-  description = "Specifies the name of the local administrator account."
+  sensitive   = true
+  description = "Specifies the name of the local administrator account.NOTE:- Optional for Linux Vm but REQUIRED for Windows VM"
 }
 
 variable "source_image_id" {
@@ -610,7 +617,8 @@ variable "source_image_id" {
 variable "admin_password" {
   type        = string
   default     = null
-  description = "The password associated with the local administrator account."
+  sensitive   = true
+  description = "The password associated with the local administrator account.NOTE:- Optional for Linux Vm but REQUIRED for Windows VM"
 }
 
 variable "windows_distribution_name" {
@@ -685,7 +693,7 @@ variable "plan_product" {
 variable "create_option" {
   type        = string
   default     = ""
-  description = "Specifies how the OS Disk should be created. Possible values are Attach (managed disks only) and FromImage."
+  description = "Specifies how the azure managed Disk should be created. Possible values are Attach (managed disks only) and FromImage."
 }
 
 variable "caching" {
@@ -696,7 +704,7 @@ variable "caching" {
 
 variable "computer_name" {
   type        = string
-  default     = ""
+  default     = null
   description = "Name of the Windows Computer Name."
 }
 
@@ -823,7 +831,7 @@ variable "public_key" {
 }
 
 variable "vm_availability_zone" {
-  description = "The Zone in which this Virtual Machine should be created. Conflicts with availability set and shouldn't use both"
+  description = "(Optional) Specifies the Availability Zone in which this Virtual Machine should be located. Changing this forces a new Virtual Machine to be created."
   default     = null
 }
 
@@ -861,64 +869,70 @@ variable "key_vault_rbac_auth_enabled" {
 
 # Extensions
 
-variable "is_extension_enabled" {
-  type        = bool
-  default     = false
-  description = "Set this value as true to create the virtual machine extension."
+variable "extensions" {
+  description = "List of extensions for azure virtual machine"
+  default     = []
 }
 
-variable "extension_virtual_machine_id" {
-  type        = list(string)
-  default     = null
-  description = "Set the id of the virtual machine for the extension."
-}
+# variable "is_extension_enabled" {
+#   type        = bool
+#   default     = false
+#   description = "Set this value as true to create the virtual machine extension."
+# }
 
-variable "extension_publisher" {
-  type        = list(string)
-  default     = null
-  description = "Set the publisher of the extension for the Virtual Machine."
-}
+# variable "extension_virtual_machine_id" {
+#   type        = list(string)
+#   default     = null
+#   description = "Set the id of the virtual machine for the extension."
+# }
 
-variable "extension_name" {
-  type        = list(string)
-  default     = null
-  description = "Name of the Extension."
-}
+# variable "extension_publisher" {
+#   type        = list(string)
+#   default     = null
+#   description = "Set the publisher of the extension for the Virtual Machine."
+# }
 
-variable "extension_type" {
-  type        = list(string)
-  default     = null
-  description = "Set the Type of extension for the Virtual Machine."
-}
+# variable "extension_name" {
+#   type        = list(string)
+#   default     = null
+#   description = "Name of the Extension."
+# }
 
-variable "extension_type_handler" {
-  type        = list(string)
-  default     = null
-  description = "Set the Type handler version of extension for the Virtual Machine."
-}
+# variable "extension_type" {
+#   type        = list(string)
+#   default     = null
+#   description = "Set the Type of extension for the Virtual Machine."
+# }
 
-variable "auto_upgrade_minor_version" {
-  type        = list(bool)
-  default     = [false]
-  description = "Set the true to auto upgrade the monor version of the extension."
-}
+# variable "extension_type_handler" {
+#   type        = list(string)
+#   default     = null
+#   description = "Set the Type handler version of extension for the Virtual Machine."
+# }
 
-variable "settings" {
-  default     = null
-  description = "The settings passed to the extension, these are specified as a JSON object in a string."
-}
+# variable "auto_upgrade_minor_version" {
+#   type        = list(bool)
+#   default     = null
+#   description = "Set the true to auto upgrade the monor version of the extension."
+# }
 
-variable "protected_settings" {
-  type = list(any)
-  # default     = []
-  description = "The protected_settings passed to the extension, like settings, these are specified as a JSON object in a string."
-}
+# variable "settings" {
+#   type        = any
+#   default     = null
+#   description = "The settings passed to the extension, these are specified as a JSON object in a string."
+# }
 
-variable "automatic_upgrade_enabled" {
-  type        = list(bool)
-  default     = [false]
-  description = "Set the true to auto upgrade the extension version."
-}
+# variable "protected_settings" {
+#   type = list(any)
+#   default     = null
+#   description = "The protected_settings passed to the extension, like settings, these are specified as a JSON object in a string."
+# }
+
+# variable "automatic_upgrade_enabled" {
+#   type        = list(bool)
+#   default     = null
+#   description = "Set the true to auto upgrade the extension version."
+# }
 
 #### enable diagnostic setting
 variable "log_analytics_destination_type" {
@@ -974,4 +988,40 @@ variable "eventhub_authorization_rule_id" {
   type        = string
   default     = null
   description = "Specifies the ID of an Event Hub Namespace Authorization Rule used to send Diagnostics Data."
+}
+
+variable "dedicated_host_id" {
+  type        = string
+  default     = null
+  description = "(Optional) The ID of a Dedicated Host where this machine should be run on. Conflicts with dedicated_host_group_id."
+}
+
+variable "enable_automatic_updates" {
+  type        = bool
+  default     = true
+  description = "(Optional) Specifies if Automatic Updates are Enabled for the Windows Virtual Machine. Changing this forces a new resource to be created. Defaults to true."
+}
+
+variable "windows_patch_mode" {
+  type        = string
+  default     = "AutomaticByOS"
+  description = "Optional) Specifies the mode of in-guest patching to this Windows Virtual Machine. Possible values are Manual, AutomaticByOS and AutomaticByPlatform. Defaults to AutomaticByOS. "
+}
+
+variable "linux_patch_mode" {
+  type        = string
+  default     = "ImageDefault"
+  description = "(Optional) Specifies the mode of in-guest patching to this Linux Virtual Machine. Possible values are AutomaticByPlatform and ImageDefault. Defaults to ImageDefault"
+}
+
+variable "patch_assessment_mode" {
+  type        = string
+  default     = "ImageDefault"
+  description = "(Optional) Specifies the mode of VM Guest Patching for the Virtual Machine. Possible values are AutomaticByPlatform or ImageDefault. Defaults to ImageDefault."
+}
+
+variable "allow_extension_operations" {
+  type        = bool
+  default     = true
+  description = "(Optional) Should Extension Operations be allowed on this Virtual Machine? Defaults to true."
 }
