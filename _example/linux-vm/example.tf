@@ -6,7 +6,7 @@ module "resource_group" {
   source  = "clouddrove/resource-group/azure"
   version = "1.0.0"
 
-  name        = "app-test-vm"
+  name        = "vm"
   environment = "test"
   label_order = ["name", "environment"]
   location    = "Canada Central"
@@ -178,20 +178,33 @@ module "virtual-machine" {
   ]
 
   # Extension
+  extensions = [{
+    extension_publisher            = "Microsoft.Azure.Security"
+    extension_name                 = "CustomExt"
+    extension_type                 = "IaaSAntimalware"
+    extension_type_handler_version = "1.3"
+    auto_upgrade_minor_version     = true
+    automatic_upgrade_enabled      = false
+    settings                       = <<SETTINGS
+                                        {
+                                          "AntimalwareEnabled": true,
+                                          "RealtimeProtectionEnabled": "true",
+                                          "ScheduledScanSettings": {
+                                              "isEnabled": "false",
+                                              "day": "7",
+                                              "time": "120",
+                                              "scanType": "Quick"
+                                          },
+                                          "Exclusions": {
+                                              "Extensions": "",
+                                              "Paths": "",
+                                              "Processes": ""
+                                          }
+                                        }
+                                      SETTINGS
+  }]
 
-  is_extension_enabled       = true
-  extension_name             = ["CustomScript"]
-  extension_publisher        = ["Microsoft.Azure.Extensions"]
-  extension_type             = ["CustomScript"]
-  extension_type_handler     = ["2.0"]
-  auto_upgrade_minor_version = [true]
-  automatic_upgrade_enabled  = [false]
-  settings                   = <<SETTINGS
-  {
-        "commandToExecute": "hostname && uptime"
-  }
-  SETTINGS
-  protected_settings         = [null]
+  protected_settings = [null]
 
   ## protected_settings = <<PROTECTED_SETTINGS
   # map values here

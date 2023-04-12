@@ -30,7 +30,7 @@ output "linux_virtual_machine_id" {
 }
 
 output "windows_virtual_machine_id" {
-  value       = join("", azurerm_virtual_machine.win_vm.*.id)
+  value       = join("", azurerm_windows_virtual_machine.win_vm.*.id)
   description = "The ID of the Windows Virtual Machine."
 }
 
@@ -55,6 +55,6 @@ output "key_id" {
 }
 
 output "extension_id" {
-  value       = join("", azurerm_virtual_machine_extension.vm_insight_monitor_agent.*.id)
+  value       = { for id in azurerm_virtual_machine_extension.vm_insight_monitor_agent : id.name => id.id }
   description = "The ID of the Virtual Machine Extension."
 }
