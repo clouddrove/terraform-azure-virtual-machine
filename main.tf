@@ -326,7 +326,7 @@ resource "azurerm_role_assignment" "azurerm_disk_encryption_set_key_vault_access
 
 resource "azurerm_key_vault_key" "example" {
   count        = var.enabled && var.enable_disk_encryption_set ? var.machine_count : 0
-  name         = var.vm_addon_name ? format("vm-%s-vault-key-%s", module.labels.id, count.index + 1) : format("vm-%s-vault-key-%s", module.labels.id, var.vm_addon_name)
+  name         = var.vm_addon_name == null ? format("vm-%s-vault-key-%s", module.labels.id, count.index + 1) : format("vm-%s-vault-key-%s", module.labels.id, var.vm_addon_name)
   key_vault_id = var.key_vault_id
   key_type     = "RSA"
   key_size     = 2048
@@ -345,8 +345,8 @@ resource "azurerm_key_vault_access_policy" "main" {
 
   key_vault_id = var.key_vault_id
 
-  tenant_id = azurerm_disk_encryption_set.example.*.identity.0.tenant_id
-  object_id = azurerm_disk_encryption_set.example.*.identity.0.principal_id
+  tenant_id = azurerm_disk_encryption_set.example[0].identity.0.tenant_id
+  object_id = azurerm_disk_encryption_set.example[0].identity.0.principal_id
   key_permissions = [
     "Create",
     "Delete",
@@ -374,7 +374,7 @@ resource "azurerm_managed_disk" "data_disk" {
     }
   }
 
-  name                   = each.value.data_disk.name
+  name                   = format("%s-managed-disk", each.value.data_disk.name)
   resource_group_name    = var.resource_group_name
   location               = var.location
   storage_account_type   = lookup(each.value.data_disk, "storage_account_type", "StandardSSD_LRS")
