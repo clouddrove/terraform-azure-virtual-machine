@@ -374,7 +374,7 @@ resource "azurerm_managed_disk" "data_disk" {
     }
   }
 
-  name                   = format("%s-managed-disk", each.value.data_disk.name)
+  name                   = format("%s-%s-managed-disk",module.labels.id, each.value.data_disk.name)
   resource_group_name    = var.resource_group_name
   location               = var.location
   storage_account_type   = lookup(each.value.data_disk, "storage_account_type", "StandardSSD_LRS")
