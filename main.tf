@@ -262,7 +262,7 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
     for_each = var.identity_enabled ? [1] : []
 
     content {
-      type         = var.vm_type
+      type         = var.sa_type
       identity_ids = var.identity_ids
     }
   }
