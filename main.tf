@@ -55,7 +55,7 @@ resource "azurerm_network_interface" "default" {
 #Description : Terraform resource to create a availability set for virtual machine.
 resource "azurerm_availability_set" "default" {
   count                        = var.enabled && var.availability_set_enabled ? 1 : 0
-  name                         = format("%s-availability-set", module.labels.id)
+  name                         = var.vm_addon_name == null ? format("%s-availability-set", module.labels.id) : format("%s-availability-set-%s", module.labels.id, var.vm_addon_name)
   resource_group_name          = var.resource_group_name
   location                     = var.location
   platform_update_domain_count = var.platform_update_domain_count
@@ -178,7 +178,7 @@ resource "azurerm_linux_virtual_machine" "default" {
 
 
   os_disk {
-    name                      = format("%s-storage-os-disk", module.labels.id)
+    name                      = var.vm_addon_name == null ? format("%s-storage-os-disk", module.labels.id) : format("%s-storage-os-disk-%s", module.labels.id, var.vm_addon_name)
     storage_account_type      = var.os_disk_storage_account_type
     caching                   = var.caching
     disk_encryption_set_id    = var.enable_disk_encryption_set ? azurerm_disk_encryption_set.example[0].id : null
