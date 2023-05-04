@@ -54,7 +54,7 @@ module "subnet" {
 
 module "security_group" {
   source  = "clouddrove/network-security-group/azure"
-  version = "1.0.0"
+  version = "1.0.2"
   ## Tags
   name        = "app"
   environment = "test"
