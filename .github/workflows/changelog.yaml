@@ -1,14 +1,60 @@
-name: changelog
-permissions: write-all
+# name: changelog
+# permissions: write-all
+
+# on:
+#   push:
+#     tags:
+#       - "*"
+#   # Allows you to run this workflow manually from the Actions tab
+#   workflow_dispatch:
+# jobs:
+#   call-workflow-changelog:
+#     uses: clouddrove/github-shared-workflows/.github/workflows/changelog.yml@master
+#     with:
+#       branch: 'master'
+
+
+name: CHANGELOG
 
 on:
   push:
     tags:
       - "*"
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+
 jobs:
-  call-workflow-changelog:
-    uses: clouddrove/github-shared-workflows/.github/workflows/changelog.yml@master
-    with:
-      branch: 'master'
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Update CHANGELOG
+        id: changelog
+        uses: requarks/changelog-action@v1
+        with:
+          token: ${{ github.token }}
+          excludeTypes: ""
+          includeInvalidCommits: false
+          tag: ${{ github.ref_name }}
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          allowUpdates: true
+          draft: false
+          makeLatest: true
+          name: ${{ github.ref_name }}
+          body: ${{ steps.changelog.outputs.changes }}
+          token: ${{ github.token }}
+
+      - name: Commit CHANGELOG.md
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          branch: master
+          commit_user_name: nileshgadgi # defaults to "github-actions[bot]"
+          commit_user_email: nilesh.gadgi@clouddrove.com # defaults to "41898282+github-actions[bot]@users.noreply.github.com"
+          commit_author: Author <actions@github.com> # defaults to author of the commit that triggered the run
+
+          commit_message: 'docs: update CHANGELOG.md for ${{ github.ref_name }}'
+          file_pattern: CHANGELOG.md
