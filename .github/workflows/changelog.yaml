@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB }}
 
       - name: Update CHANGELOG
         id: changelog
