@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2023-05-05
+### :sparkles: New Features
+- [`4acc38c`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/4acc38c0f994e74f2baf2363e17169a83ff8433d) - auto changelog action added *(commit by [@anmolnagpal](https://github.com/anmolnagpal))*
+- [`c889dc1`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/c889dc19ef17c34fccfefe8311570067bd6bd65d) - added dependabot.yml file *(commit by [@themaheshyadav](https://github.com/themaheshyadav))*
+
+### :bug: Bug Fixes
+- [`86bfda7`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/86bfda7ac4ce9a178cba0f3ff474bf57c4b99a59) - checkout action for workflow with github token *(commit by [@nileshgadgi](https://github.com/nileshgadgi))*
+
+
 ## [1.0.5] - 2023-04-13
 ### :bug: Bug Fixes
 - [`28165db`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/28165db28e0687d0d56e78fa119201f1e67106d4) - Map type added for virtual machine extension and changed naming for all resources
@@ -36,3 +45,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.3]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.3...1.0.4
 [1.0.4]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.3...1.0.4
 [1.0.5]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.4...1.0.5
+
+[1.0.6]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.5...1.0.6
