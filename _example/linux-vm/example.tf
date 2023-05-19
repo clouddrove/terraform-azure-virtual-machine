@@ -98,7 +98,7 @@ module "key_vault" {
   enable_private_endpoint = true
   ##RBAC
   enable_rbac_authorization = true
-  principal_id              = ["71xxxxxxxxxxxxxxxxxx1166d7c97"]
+  principal_id              = ["c2#################3"]
   role_definition_name      = ["Key Vault Administrator"]
 }
 
@@ -178,25 +178,18 @@ module "virtual-machine" {
 
   # Extension
 
-  is_extension_enabled       = true
-  extension_name             = ["CustomScript"]
-  extension_publisher        = ["Microsoft.Azure.Extensions"]
-  extension_type             = ["CustomScript"]
-  extension_type_handler     = ["2.0"]
-  auto_upgrade_minor_version = [true]
-  automatic_upgrade_enabled  = [false]
-  settings                   = <<SETTINGS
+  is_extension_enabled   = true
+  extension_publisher    = "Microsoft.Azure.Extensions"
+  extension_type         = "CustomScript"
+  extension_type_handler = "2.0"
+  settings               = <<SETTINGS
   {
         "commandToExecute": "hostname && uptime"
   }
   SETTINGS
-  protected_settings         = [null]
 
   ## protected_settings = <<PROTECTED_SETTINGS
   # map values here
   # PROTECTED_SETTINGS
 
-  #### enable diagnostic setting
-  diagnostic_setting_enable  = false
-  log_analytics_workspace_id = ""
 }

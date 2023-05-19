@@ -877,38 +877,32 @@ variable "is_extension_enabled" {
 }
 
 variable "extension_virtual_machine_id" {
-  type        = list(string)
+  type        = string
   default     = null
   description = "Set the id of the virtual machine for the extension."
 }
 
 variable "extension_publisher" {
-  type        = list(string)
+  type        = string
   default     = null
   description = "Set the publisher of the extension for the Virtual Machine."
 }
 
-variable "extension_name" {
-  type        = list(string)
-  default     = null
-  description = "Name of the Extension."
-}
-
 variable "extension_type" {
-  type        = list(string)
+  type        = string
   default     = null
   description = "Set the Type of extension for the Virtual Machine."
 }
 
 variable "extension_type_handler" {
-  type        = list(string)
+  type        = string
   default     = null
   description = "Set the Type handler version of extension for the Virtual Machine."
 }
 
 variable "auto_upgrade_minor_version" {
-  type        = list(bool)
-  default     = [false]
+  type        = bool
+  default     = false
   description = "Set the true to auto upgrade the monor version of the extension."
 }
 
@@ -918,69 +912,6 @@ variable "settings" {
 }
 
 variable "protected_settings" {
-  type = list(any)
-  # default     = []
+  default     = null
   description = "The protected_settings passed to the extension, like settings, these are specified as a JSON object in a string."
-}
-
-variable "automatic_upgrade_enabled" {
-  type        = list(bool)
-  default     = [false]
-  description = "Set the true to auto upgrade the extension version."
-}
-
-#### enable diagnostic setting
-variable "log_analytics_destination_type" {
-  type        = string
-  default     = "AzureDiagnostics"
-  description = "Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table."
-}
-variable "retention_policy_enabled" {
-  type        = bool
-  default     = false
-  description = "Is this Retention Policy enabled?"
-}
-variable "diagnostic_log_days" {
-  type        = number
-  default     = "90"
-  description = " The number of days for which this Retention Policy should apply."
-}
-variable "Metric_enable" {
-  type        = bool
-  default     = true
-  description = "Is this Diagnostic Metric enabled? Defaults to true."
-}
-variable "diagnostic_setting_enable" {
-  type    = bool
-  default = false
-}
-variable "log_analytics_workspace_id" {
-  type    = string
-  default = null
-}
-
-variable "category" {
-  type        = string
-  default     = null
-  description = " The name of a Diagnostic Log Category Group for this Resource."
-}
-variable "log_enabled" {
-  type        = string
-  default     = true
-  description = " Is this Diagnostic Log enabled? Defaults to true."
-}
-variable "storage_account_id" {
-  type        = string
-  default     = null
-  description = "The ID of the Storage Account where logs should be sent."
-}
-variable "eventhub_name" {
-  type        = string
-  default     = null
-  description = "Specifies the name of the Event Hub where Diagnostics Data should be sent."
-}
-variable "eventhub_authorization_rule_id" {
-  type        = string
-  default     = null
-  description = "Specifies the ID of an Event Hub Namespace Authorization Rule used to send Diagnostics Data."
 }

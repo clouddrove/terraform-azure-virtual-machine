@@ -40,9 +40,9 @@ resource "azurerm_network_interface" "default" {
     subnet_id                     = var.private_ip_address_version == "IPv4" ? element(var.subnet_id, count.index) : ""
     private_ip_address_version    = var.private_ip_address_version
     private_ip_address_allocation = var.private_ip_address_allocation
-    public_ip_address_id          = var.public_ip_enabled ? element(azurerm_public_ip.default.*.id, count.index) : null
+    public_ip_address_id          = var.public_ip_enabled ? element(azurerm_public_ip.default.*.id, count.index) : ""
     primary                       = var.primary
-    private_ip_address            = var.private_ip_address_allocation == "Static" ? element(var.private_ip_addresses, count.index) : null
+    private_ip_address            = var.private_ip_address_allocation == "Static" ? element(var.private_ip_addresses, count.index) : ""
   }
 
   timeouts {
@@ -401,80 +401,24 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 }
 
 resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
-  count                      = var.is_extension_enabled == true ? length(var.extension_publisher) : 0
-  name                       = var.extension_name[count.index]
+  count                      = var.is_extension_enabled == true ? 1 : 0
+  name                       = format("%s-vm-extension", module.labels.id)
   virtual_machine_id         = var.is_vm_linux != true ? azurerm_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
-  publisher                  = var.extension_publisher[count.index]
-  type                       = var.extension_type[count.index]
-  type_handler_version       = var.extension_type_handler[count.index]
-  auto_upgrade_minor_version = var.auto_upgrade_minor_version[count.index]
-  automatic_upgrade_enabled  = var.automatic_upgrade_enabled[count.index]
-  settings                   = var.settings[count.index]
-  protected_settings         = var.protected_settings[count.index]
+  publisher                  = var.extension_publisher
+  type                       = var.extension_type
+  type_handler_version       = var.extension_type_handler
+  auto_upgrade_minor_version = var.auto_upgrade_minor_version
+
+  settings = var.settings
+  # <<SETTINGS
+  #   {
+  #     ${var.settings}
+  #   }
+  # SETTINGS
+
+  protected_settings = var.protected_settings
 
 }
 
-resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
-  count                          = var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
-  name                           = format("%s-vm-pip-%s-diagnostic-log", module.labels.id, count.index + 1)
-  target_resource_id             = join("", azurerm_public_ip.default.*.id)
-  storage_account_id             = var.storage_account_id
-  eventhub_name                  = var.eventhub_name
-  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
-  log_analytics_workspace_id     = var.log_analytics_workspace_id
-  log_analytics_destination_type = var.log_analytics_destination_type
-  metric {
-    category = "AllMetrics"
-    enabled  = var.Metric_enable
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.diagnostic_log_days
-    }
-  }
-  log {
-    category       = var.category
-    category_group = "AllLogs"
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.diagnostic_log_days
-    }
-    enabled = var.log_enabled
-  }
-
-  log {
-    category       = var.category
-    category_group = "Audit"
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.diagnostic_log_days
-    }
-    enabled = var.log_enabled
-  }
-  lifecycle {
-    ignore_changes = [log_analytics_destination_type]
-  }
-}
-
-resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
-  count                          = var.diagnostic_setting_enable ? var.machine_count : 0
-  name                           = format("%s-network-interface-%s-diagnostic-log", module.labels.id, count.index + 1)
-  target_resource_id             = join("", azurerm_network_interface.default.*.id)
-  storage_account_id             = var.storage_account_id
-  eventhub_name                  = var.eventhub_name
-  eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
-  log_analytics_workspace_id     = var.log_analytics_workspace_id
-  log_analytics_destination_type = var.log_analytics_destination_type
-  metric {
-    category = "AllMetrics"
-    enabled  = var.Metric_enable
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.days
-    }
-  }
-  lifecycle {
-    ignore_changes = [log_analytics_destination_type]
-  }
-}
 
 
