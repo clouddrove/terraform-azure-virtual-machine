@@ -4,9 +4,9 @@ provider "azurerm" {
 
 module "resource_group" {
   source  = "clouddrove/resource-group/azure"
-  version = "1.0.2"
+  version = "1.0.0"
 
-  name        = "vm-windows-1"
+  name        = "app-win-vm"
   environment = "test"
   label_order = ["name", "environment"]
   location    = "Canada Central"
@@ -14,7 +14,7 @@ module "resource_group" {
 
 module "vnet" {
   source  = "clouddrove/vnet/azure"
-  version = "1.0.2"
+  version = "1.0.0"
 
   name                = "app"
   environment         = "test"
@@ -27,7 +27,7 @@ module "vnet" {
 
 module "subnet" {
   source  = "clouddrove/subnet/azure"
-  version = "1.0.2"
+  version = "1.0.1"
 
   name                 = "app"
   environment          = "test"
@@ -54,7 +54,7 @@ module "subnet" {
 
 module "security_group" {
   source  = "clouddrove/network-security-group/azure"
-  version = "1.0.3"
+  version = "1.0.0"
   ## Tags
   name        = "app"
   environment = "test"
@@ -104,22 +104,22 @@ module "virtual-machine" {
   label_order = ["environment", "name"]
 
   ## Common
-  is_vm_windows       = true
-  enabled             = true
-  machine_count       = 1
-  resource_group_name = module.resource_group.resource_group_name
-  location            = module.resource_group.resource_group_location
-  create_option       = "Empty"
-  disk_size_gb        = 128
-  provision_vm_agent  = true
+  is_vm_windows                   = true
+  enabled                         = true
+  machine_count                   = 1
+  resource_group_name             = module.resource_group.resource_group_name
+  location                        = module.resource_group.resource_group_location
+  disable_password_authentication = false
+  create_option                   = "FromImage"
+  disk_size_gb                    = 128
 
 
   ## Network Interface
   subnet_id                     = module.subnet.default_subnet_id
   private_ip_address_version    = "IPv4"
-  private_ip_address_allocation = "Dynamic"
+  private_ip_address_allocation = "Static"
   primary                       = true
-  # private_ip_addresses          = ["10.0.1.4"]
+  private_ip_addresses          = ["10.0.1.4"]
   #nsg
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
@@ -152,7 +152,6 @@ module "virtual-machine" {
   image_offer     = "WindowsServer"
   image_sku       = "2019-Datacenter"
   image_version   = "latest"
-  caching         = "ReadWrite"
 
 
   # Boot diagnostics to troubleshoot virtual machines, by default uses managed
@@ -170,10 +169,10 @@ module "virtual-machine" {
       disk_size_gb         = 128
       storage_account_type = "StandardSSD_LRS"
     }
-    # , {
+    # ,{
     #   name                 = "disk2"
     #   disk_size_gb         = 200
-    #   storage_account_type = "StandardSSD_LRS"
+    #   storage_account_type = "Standard_LRS"
     # }
   ]
 
@@ -184,31 +183,24 @@ module "virtual-machine" {
   # log_analytics_workspace_primary_shared_key = data.azurerm_log_analytics_workspace.example.primary_shared_key
 
   # Extension
-  extensions = [{
-    extension_publisher            = "Microsoft.Azure.Security"
-    extension_name                 = "CustomExt"
-    extension_type                 = "IaaSAntimalware"
-    extension_type_handler_version = "1.3"
-    auto_upgrade_minor_version     = true
-    automatic_upgrade_enabled      = false
-    settings                       = <<SETTINGS
-                                        {
-                                          "AntimalwareEnabled": true,
-                                          "RealtimeProtectionEnabled": "true",
-                                          "ScheduledScanSettings": {
-                                              "isEnabled": "false",
-                                              "day": "7",
-                                              "time": "120",
-                                              "scanType": "Quick"
-                                          },
-                                          "Exclusions": {
-                                              "Extensions": "",
-                                              "Paths": "",
-                                              "Processes": ""
-                                          }
-                                        }
-                                      SETTINGS
-  }]
+
+  is_extension_enabled       = true
+  extension_name             = ["CustomScript"]
+  extension_publisher        = ["Microsoft.Azure.Extensions"]
+  extension_type             = ["CustomScript"]
+  extension_type_handler     = ["2.0"]
+  auto_upgrade_minor_version = [true]
+  automatic_upgrade_enabled  = [false]
+  settings                   = <<SETTINGS
+  {
+        "commandToExecute": "hostname && uptime"
+  }
+  SETTINGS
+  protected_settings         = [null]
+
+  ## protected_settings = <<PROTECTED_SETTINGS
+  # map values here
+  # PROTECTED_SETTINGS
 
   #### enable diagnostic setting
   diagnostic_setting_enable  = false

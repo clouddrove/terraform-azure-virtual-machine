@@ -20,11 +20,13 @@ module "labels" {
   repository  = var.repository
 }
 
+
+
 #Module      : NETWORK INTERFACE
 #Description : Terraform resource to create a network interface for virtual machine.
 resource "azurerm_network_interface" "default" {
   count                         = var.enabled ? var.machine_count : 0
-  name                          = var.vm_addon_name == null ? format("%s-network-interface-%s", module.labels.id, count.index + 1) : format("%s-network-interface-%s", module.labels.id, var.vm_addon_name)
+  name                          = format("%s-network-interface-%s", module.labels.id, count.index + 1)
   resource_group_name           = var.resource_group_name
   location                      = var.location
   dns_servers                   = var.dns_servers
@@ -34,13 +36,13 @@ resource "azurerm_network_interface" "default" {
   tags                          = module.labels.tags
 
   ip_configuration {
-    name                          = var.vm_addon_name == null ? format("%s-ip-configuration-%s", module.labels.id, count.index + 1) : format("%s-ip-configuration-%s", module.labels.id, var.vm_addon_name)
+    name                          = format("%s-ip-configuration-%s", module.labels.id, count.index + 1)
     subnet_id                     = var.private_ip_address_version == "IPv4" ? element(var.subnet_id, count.index) : ""
     private_ip_address_version    = var.private_ip_address_version
     private_ip_address_allocation = var.private_ip_address_allocation
     public_ip_address_id          = var.public_ip_enabled ? element(azurerm_public_ip.default.*.id, count.index) : null
     primary                       = var.primary
-    private_ip_address            = var.private_ip_address_allocation == "Static" ? element(var.private_ip_addresses, count.index) : ""
+    private_ip_address            = var.private_ip_address_allocation == "Static" ? element(var.private_ip_addresses, count.index) : null
   }
 
   timeouts {
@@ -55,7 +57,7 @@ resource "azurerm_network_interface" "default" {
 #Description : Terraform resource to create a availability set for virtual machine.
 resource "azurerm_availability_set" "default" {
   count                        = var.enabled && var.availability_set_enabled ? 1 : 0
-  name                         = var.vm_addon_name == null ? format("%s-availability-set", module.labels.id) : format("%s-availability-set-%s", module.labels.id, var.vm_addon_name)
+  name                         = format("%s-availability-set", module.labels.id)
   resource_group_name          = var.resource_group_name
   location                     = var.location
   platform_update_domain_count = var.platform_update_domain_count
@@ -76,7 +78,7 @@ resource "azurerm_availability_set" "default" {
 #Description : Terraform resource to create a public IP for network interface.
 resource "azurerm_public_ip" "default" {
   count                   = var.enabled && var.public_ip_enabled ? var.machine_count : 0
-  name                    = var.vm_addon_name == null ? format("%s-public-ip-%s", module.labels.id, count.index + 1) : format("%s-public-ip-%s", module.labels.id, var.vm_addon_name)
+  name                    = format("%s-public-ip-%s", module.labels.id, count.index + 1)
   resource_group_name     = var.resource_group_name
   location                = var.location
   sku                     = var.sku
@@ -105,24 +107,25 @@ resource "azurerm_linux_virtual_machine" "default" {
   depends_on = [
     azurerm_role_assignment.azurerm_disk_encryption_set_key_vault_access
   ]
-  count                           = var.is_vm_linux && var.enabled ? var.machine_count : 0
-  name                            = var.vm_addon_name == null ? format("%s-virtual-machine-%s", module.labels.id, count.index + 1) : format("%s-virtual-machine-%s", module.labels.id, var.vm_addon_name)
+  count                           = var.is_vm_linux ? var.machine_count : 0
+  name                            = format("%s-virtual-machine-%s", module.labels.id, count.index + 1)
   resource_group_name             = var.resource_group_name
   location                        = var.location
   size                            = var.vm_size
   admin_username                  = var.admin_username
-  admin_password                  = var.disable_password_authentication == true ? null : var.admin_password
+  admin_password                  = var.disable_password_authentication == false && var.admin_password == null ? "" : var.admin_password
   disable_password_authentication = var.disable_password_authentication
   network_interface_ids           = [element(azurerm_network_interface.default.*.id, count.index)]
   source_image_id                 = var.source_image_id != null ? var.source_image_id : null
   availability_set_id             = join("", azurerm_availability_set.default.*.id)
   proximity_placement_group_id    = var.proximity_placement_group_id
   encryption_at_host_enabled      = var.enable_encryption_at_host
-  patch_assessment_mode           = var.patch_assessment_mode
-  patch_mode                      = var.linux_patch_mode
-  provision_vm_agent              = var.provision_vm_agent
-  zone                            = var.vm_availability_zone
+  patch_assessment_mode           = "AutomaticByPlatform"
+  patch_mode                      = "AutomaticByPlatform"
+  provision_vm_agent              = true
 
+
+  zone = var.vm_availability_zone
   tags = module.labels.tags
 
 
@@ -178,12 +181,13 @@ resource "azurerm_linux_virtual_machine" "default" {
 
 
   os_disk {
-    name                      = var.vm_addon_name == null ? format("%s-storage-os-disk", module.labels.id) : format("%s-storage-os-disk-%s", module.labels.id, var.vm_addon_name)
+    name                      = format("%s-storage-os-disk", module.labels.id)
     storage_account_type      = var.os_disk_storage_account_type
     caching                   = var.caching
-    disk_encryption_set_id    = var.enable_disk_encryption_set ? azurerm_disk_encryption_set.example[0].id : null
+    disk_encryption_set_id    = var.enable_disk_encryption_set ? var.disk_encryption_set_id : null
     disk_size_gb              = var.disk_size_gb
     write_accelerator_enabled = var.write_accelerator_enabled
+
   }
 
 
@@ -213,40 +217,38 @@ resource "azurerm_linux_virtual_machine" "default" {
 
 #Module      : Windows VIRTUAL MACHINE
 #Description : Terraform resource to create a windows virtual machine.
-resource "azurerm_windows_virtual_machine" "win_vm" {
-  depends_on = [
-    azurerm_role_assignment.azurerm_disk_encryption_set_key_vault_access
-  ]
-  count                        = var.is_vm_windows && var.enabled ? var.machine_count : 0
-  name                         = var.vm_addon_name == null ? format("%s-win-virtual-machine-%s", module.labels.id, count.index + 1) : format("%s-win-virtual-machine-%s", module.labels.id, var.vm_addon_name)
-  computer_name                = var.computer_name != null ? var.computer_name : format("%s-win-virtual-machine-%s", module.labels.id, count.index + 1)
-  resource_group_name          = var.resource_group_name
-  location                     = var.location
-  network_interface_ids        = [element(azurerm_network_interface.default.*.id, count.index)]
-  size                         = var.vm_size
-  admin_password               = var.admin_password
-  admin_username               = var.admin_username
-  source_image_id              = var.source_image_id != null ? var.source_image_id : null
-  provision_vm_agent           = var.provision_vm_agent
-  allow_extension_operations   = var.allow_extension_operations
-  dedicated_host_id            = var.dedicated_host_id
-  enable_automatic_updates     = var.enable_automatic_updates
-  license_type                 = var.license_type
-  availability_set_id          = var.availability_set_enabled ? join("", azurerm_availability_set.default.*.id) : null
-  encryption_at_host_enabled   = var.enable_encryption_at_host
-  proximity_placement_group_id = var.proximity_placement_group_id
-  patch_mode                   = var.windows_patch_mode
-  patch_assessment_mode        = var.patch_assessment_mode
-  zone                         = var.vm_availability_zone
-  timezone                     = var.timezone
-  tags                         = module.labels.tags
+resource "azurerm_virtual_machine" "win_vm" {
+  count                 = var.is_vm_windows ? var.machine_count : 0
+  name                  = format("%s-win-virtual-machine-%s", module.labels.id, count.index + 1)
+  resource_group_name   = var.resource_group_name
+  location              = var.location
+  network_interface_ids = [element(azurerm_network_interface.default.*.id, count.index)]
+  vm_size               = var.vm_size
 
+  availability_set_id              = join("", azurerm_availability_set.default.*.id)
+  delete_os_disk_on_termination    = var.delete_os_disk_on_termination
+  delete_data_disks_on_termination = var.delete_data_disks_on_termination
+  primary_network_interface_id     = element(azurerm_network_interface.default.*.id, count.index)
+  proximity_placement_group_id     = var.proximity_placement_group_id
+  zones                            = var.zones
+  tags                             = module.labels.tags
+
+  os_profile_windows_config {
+    provision_vm_agent = true
+  }
+
+  os_profile {
+    computer_name  = var.computer_name
+    admin_username = var.admin_username
+    admin_password = var.admin_password
+  }
 
   dynamic "boot_diagnostics" {
     for_each = var.boot_diagnostics_enabled ? [1] : []
 
     content {
-      storage_account_uri = var.blob_endpoint
+      enabled     = var.boot_diagnostics_enabled
+      storage_uri = var.blob_endpoint
     }
   }
 
@@ -262,21 +264,22 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
     for_each = var.identity_enabled ? [1] : []
 
     content {
-      type         = var.sa_type
+      type         = var.vm_type
       identity_ids = var.identity_ids
     }
   }
 
-  os_disk {
-    storage_account_type      = var.os_disk_storage_account_type
-    caching                   = var.caching
-    disk_encryption_set_id    = var.enable_disk_encryption_set ? azurerm_disk_encryption_set.example[0].id : null
+  storage_os_disk {
+    create_option = var.create_option
+    # storage_account_type      = var.os_disk_storage_account_type
+    caching = var.caching
+    # disk_encryption_set_id    = var.disk_encryption_set_id
     disk_size_gb              = var.disk_size_gb
     write_accelerator_enabled = var.enable_os_disk_write_accelerator
-    name                      = var.vm_addon_name == null ? format("%s-win-storage-data-disk-%s", module.labels.id, count.index + 1) : format("%s-win-storage-data-disk-%s", module.labels.id, var.vm_addon_name)
+    name                      = format("%s-wis-storage-data-disk", module.labels.id)
   }
 
-  dynamic "source_image_reference" {
+  dynamic "storage_image_reference" {
     for_each = var.source_image_id != null ? [] : [1]
     content {
       publisher = var.custom_image_id != null ? var.image_publisher : ""
@@ -306,8 +309,8 @@ resource "azurerm_network_interface_security_group_association" "default" {
 #Module      : VIRTUAL MACHINE DISK ENCRYPTION SET
 
 resource "azurerm_disk_encryption_set" "example" {
-  count               = var.enable_disk_encryption_set ? var.machine_count : 0
-  name                = var.vm_addon_name == null ? format("vm-%s-dsk-encrpt-%s", module.labels.id, count.index + 1) : format("vm-%s-dsk-encrpt-%s", module.labels.id, var.vm_addon_name)
+  count               = var.enable_disk_encryption_set ? 1 : 0
+  name                = "des"
   resource_group_name = var.resource_group_name
   location            = var.location
   key_vault_key_id    = var.enable_disk_encryption_set ? join("", azurerm_key_vault_key.example.*.id) : null
@@ -318,15 +321,15 @@ resource "azurerm_disk_encryption_set" "example" {
 }
 
 resource "azurerm_role_assignment" "azurerm_disk_encryption_set_key_vault_access" {
-  count                = var.enable_disk_encryption_set ? var.machine_count : 0
+  count                = var.enable_disk_encryption_set ? 1 : 0
   scope                = var.key_vault_id //azurerm_key_vault.example.id
   role_definition_name = "Key Vault Crypto Service Encryption User"
   principal_id         = azurerm_disk_encryption_set.example.*.identity.0.principal_id[0]
 }
 
 resource "azurerm_key_vault_key" "example" {
-  count        = var.enabled && var.enable_disk_encryption_set ? var.machine_count : 0
-  name         = var.vm_addon_name == null ? format("vm-%s-vault-key-%s", module.labels.id, count.index + 1) : format("vm-%s-vault-key-%s", module.labels.id, var.vm_addon_name)
+  count        = var.enabled && var.enable_disk_encryption_set ? 1 : 0
+  name         = format("vm-%s-vault-key", module.labels.id)
   key_vault_id = var.key_vault_id
   key_type     = "RSA"
   key_size     = 2048
@@ -341,7 +344,7 @@ resource "azurerm_key_vault_key" "example" {
 }
 
 resource "azurerm_key_vault_access_policy" "main" {
-  count = var.enabled && var.enable_disk_encryption_set && var.key_vault_rbac_auth_enabled == false ? var.machine_count : 0
+  count = var.enabled && var.enable_disk_encryption_set && var.key_vault_rbac_auth_enabled == false ? 1 : 0
 
   key_vault_id = var.key_vault_id
 
@@ -374,13 +377,15 @@ resource "azurerm_managed_disk" "data_disk" {
     }
   }
 
-  name                   = format("%s-%s-managed-disk", module.labels.id, each.value.data_disk.name)
+
+  name                   = each.value.data_disk.name
   resource_group_name    = var.resource_group_name
   location               = var.location
   storage_account_type   = lookup(each.value.data_disk, "storage_account_type", "StandardSSD_LRS")
-  create_option          = var.create_option
+  create_option          = "Empty"
   disk_size_gb           = each.value.data_disk.disk_size_gb
-  disk_encryption_set_id = var.enable_disk_encryption_set ? join("", azurerm_disk_encryption_set.example.*.id) : null #var.enable_disk_encryption_set ? var.disk_encryption_set_id : null
+  disk_encryption_set_id = var.enable_disk_encryption_set ? var.disk_encryption_set_id : null
+
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
@@ -390,28 +395,28 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
     }
   }
   managed_disk_id    = azurerm_managed_disk.data_disk[each.key].id
-  virtual_machine_id = var.is_vm_windows ? azurerm_windows_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
+  virtual_machine_id = var.is_vm_windows ? azurerm_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
   lun                = each.value.it
   caching            = "ReadWrite"
 }
 
 resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
-  for_each                   = { for extension in var.extensions : extension.extension_name => extension }
-  name                       = each.value.extension_name
-  virtual_machine_id         = var.is_vm_linux != true ? azurerm_windows_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
-  publisher                  = each.value.extension_publisher
-  type                       = each.value.extension_type
-  type_handler_version       = each.value.extension_type_handler_version
-  auto_upgrade_minor_version = lookup(each.value, "auto_upgrade_minor_version", null)
-  automatic_upgrade_enabled  = lookup(each.value, "automatic_upgrade_enabled", null)
-  settings                   = lookup(each.value, "settings", null)
-  protected_settings         = lookup(each.value, "protected_settings", null)
-  tags                       = module.labels.tags
+  count                      = var.is_extension_enabled == true ? length(var.extension_publisher) : 0
+  name                       = var.extension_name[count.index]
+  virtual_machine_id         = var.is_vm_linux != true ? azurerm_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
+  publisher                  = var.extension_publisher[count.index]
+  type                       = var.extension_type[count.index]
+  type_handler_version       = var.extension_type_handler[count.index]
+  auto_upgrade_minor_version = var.auto_upgrade_minor_version[count.index]
+  automatic_upgrade_enabled  = var.automatic_upgrade_enabled[count.index]
+  settings                   = var.settings[count.index]
+  protected_settings         = var.protected_settings[count.index]
+
 }
 
 resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
   count                          = var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
-  name                           = var.vm_addon_name == null ? format("%s-vm-pip-%s-diagnostic-log", module.labels.id, count.index + 1) : format("%s-vm-pip-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
+  name                           = format("%s-vm-pip-%s-diagnostic-log", module.labels.id, count.index + 1)
   target_resource_id             = join("", azurerm_public_ip.default.*.id)
   storage_account_id             = var.storage_account_id
   eventhub_name                  = var.eventhub_name
@@ -452,7 +457,7 @@ resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
 
 resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
   count                          = var.diagnostic_setting_enable ? var.machine_count : 0
-  name                           = var.vm_addon_name == null ? format("%s-network-interface-%s-diagnostic-log", module.labels.id, count.index + 1) : format("%s-network-interface-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
+  name                           = format("%s-network-interface-%s-diagnostic-log", module.labels.id, count.index + 1)
   target_resource_id             = join("", azurerm_network_interface.default.*.id)
   storage_account_id             = var.storage_account_id
   eventhub_name                  = var.eventhub_name
@@ -471,3 +476,5 @@ resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
     ignore_changes = [log_analytics_destination_type]
   }
 }
+
+

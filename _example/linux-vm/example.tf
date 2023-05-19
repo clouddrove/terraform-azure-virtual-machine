@@ -4,9 +4,9 @@ provider "azurerm" {
 
 module "resource_group" {
   source  = "clouddrove/resource-group/azure"
-  version = "1.0.2"
+  version = "1.0.0"
 
-  name        = "vm"
+  name        = "app-test-vm"
   environment = "test"
   label_order = ["name", "environment"]
   location    = "Canada Central"
@@ -14,7 +14,7 @@ module "resource_group" {
 
 module "vnet" {
   source  = "clouddrove/vnet/azure"
-  version = "1.0.2"
+  version = "1.0.0"
 
   name                = "app"
   environment         = "test"
@@ -27,7 +27,7 @@ module "vnet" {
 
 module "subnet" {
   source  = "clouddrove/subnet/azure"
-  version = "1.0.2"
+  version = "1.0.1"
 
   name                 = "app"
   environment          = "test"
@@ -54,7 +54,7 @@ module "subnet" {
 
 module "security_group" {
   source  = "clouddrove/network-security-group/azure"
-  version = "1.0.3"
+  version = "1.0.0"
   ## Tags
   name        = "app"
   environment = "test"
@@ -150,6 +150,7 @@ module "virtual-machine" {
   caching      = "ReadWrite"
   disk_size_gb = 30
 
+  disk_encryption_set_id          = module.virtual-machine.disk_encryption_set-id
   storage_image_reference_enabled = true
   image_publisher                 = "Canonical"
   image_offer                     = "0001-com-ubuntu-server-focal"
@@ -157,12 +158,10 @@ module "virtual-machine" {
   image_version                   = "latest"
 
 
-  enable_disk_encryption_set     = true
-  key_vault_id                   = module.key_vault.id
-  addtional_capabilities_enabled = true
-  ultra_ssd_enabled              = false
-  enable_encryption_at_host      = true
-  key_vault_rbac_auth_enabled    = false
+  enable_disk_encryption_set = true
+  key_vault_id               = module.key_vault.id
+  key_vault_key_id           = module.virtual-machine.key_id
+  enable_encryption_at_host  = true
 
   data_disks = [
     {
@@ -178,33 +177,20 @@ module "virtual-machine" {
   ]
 
   # Extension
-  extensions = [{
-    extension_publisher            = "Microsoft.Azure.Security"
-    extension_name                 = "CustomExt"
-    extension_type                 = "IaaSAntimalware"
-    extension_type_handler_version = "1.3"
-    auto_upgrade_minor_version     = true
-    automatic_upgrade_enabled      = false
-    settings                       = <<SETTINGS
-                                        {
-                                          "AntimalwareEnabled": true,
-                                          "RealtimeProtectionEnabled": "true",
-                                          "ScheduledScanSettings": {
-                                              "isEnabled": "false",
-                                              "day": "7",
-                                              "time": "120",
-                                              "scanType": "Quick"
-                                          },
-                                          "Exclusions": {
-                                              "Extensions": "",
-                                              "Paths": "",
-                                              "Processes": ""
-                                          }
-                                        }
-                                      SETTINGS
-  }]
 
-  protected_settings = [null]
+  is_extension_enabled       = true
+  extension_name             = ["CustomScript"]
+  extension_publisher        = ["Microsoft.Azure.Extensions"]
+  extension_type             = ["CustomScript"]
+  extension_type_handler     = ["2.0"]
+  auto_upgrade_minor_version = [true]
+  automatic_upgrade_enabled  = [false]
+  settings                   = <<SETTINGS
+  {
+        "commandToExecute": "hostname && uptime"
+  }
+  SETTINGS
+  protected_settings         = [null]
 
   ## protected_settings = <<PROTECTED_SETTINGS
   # map values here
