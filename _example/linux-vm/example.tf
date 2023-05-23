@@ -18,11 +18,9 @@ module "vnet" {
 
   name                = "app"
   environment         = "test"
-  label_order         = ["name", "environment"]
   resource_group_name = module.resource_group.resource_group_name
   location            = module.resource_group.resource_group_location
   address_space       = "10.0.0.0/16"
-  enable_ddos_pp      = false
 }
 
 module "subnet" {
@@ -58,13 +56,10 @@ module "security_group" {
   ## Tags
   name        = "app"
   environment = "test"
-  label_order = ["name", "environment"]
 
-  ## Security Group
   resource_group_name     = module.resource_group.resource_group_name
   resource_group_location = module.resource_group.resource_group_location
   subnet_ids              = module.subnet.default_subnet_id
-  ##Security Group rule for Custom port.
   inbound_rules = [
     {
       name                       = "ssh"
@@ -76,15 +71,14 @@ module "security_group" {
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"
       description                = "ssh allowed port"
-  }]
+    }
+  ]
 
 }
 
 module "key_vault" {
   source = "clouddrove/key-vault/azure"
-  depends_on = [
-    module.resource_group
-  ]
+
   name                        = "app13-test13"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
