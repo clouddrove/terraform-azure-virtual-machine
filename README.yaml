@@ -39,7 +39,6 @@ usage: |-
     version                        = "1.0.0"
     name        = "app"
     environment = "test"
-    label_order = ["environment", "name"]
 
     ## Common
     is_vm_linux       = true
@@ -134,7 +133,6 @@ usage: |-
     version                        = "1.0.0"
     name        = "app"
     environment = "test"
-    label_order = ["environment", "name"]
 
     ## Common
     is_vm_windows                   = true
