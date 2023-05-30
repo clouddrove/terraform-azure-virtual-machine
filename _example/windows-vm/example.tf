@@ -18,11 +18,9 @@ module "vnet" {
 
   name                = "app"
   environment         = "test"
-  label_order         = ["name", "environment"]
   resource_group_name = module.resource_group.resource_group_name
   location            = module.resource_group.resource_group_location
   address_space       = "10.0.0.0/16"
-  enable_ddos_pp      = false
 }
 
 module "subnet" {
@@ -37,12 +35,12 @@ module "subnet" {
   virtual_network_name = join("", module.vnet.vnet_name)
 
   #subnet
-  default_name_subnet = true
-  subnet_names        = ["subnet1", "subnet2"]
-  subnet_prefixes     = ["10.0.1.0/24", "10.0.2.0/24"]
+  subnet_names    = ["subnet1"]
+  subnet_prefixes = ["10.0.1.0/24"]
 
   # route_table
-  enable_route_table = false
+  enable_route_table = true
+  route_table_name   = "default_subnet"
   routes = [
     {
       name           = "rt-test"
@@ -101,7 +99,6 @@ module "virtual-machine" {
   ## Tags
   name        = "app"
   environment = "test"
-  label_order = ["environment", "name"]
 
   ## Common
   is_vm_windows       = true
