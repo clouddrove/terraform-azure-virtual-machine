@@ -146,10 +146,10 @@ module "virtual-machine" {
   allocation_method = "Static"
   ip_version        = "IPv4"
   ## Virtual Machine
-  vm_size                         = "Standard_B1s"
-  public_key                      = "vweGBuAqKX+xxxxxxxxxxx" # Enter valid public key here
-  admin_username                  = "ubuntu"
-#  admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
+  vm_size        = "Standard_B1s"
+  public_key     = "vweGBuAqKX+xxxxxxxxxxx" # Enter valid public key here
+  admin_username = "ubuntu"
+  #  admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching                         = "ReadWrite"
   disk_size_gb                    = 30
   storage_image_reference_enabled = true
