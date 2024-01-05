@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="022ae472-bac8-4db2-a990-9b0178c2b1af" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../.deepsource.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.github/workflows/auto_assignee.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.github/workflows/automerge.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.github/workflows/tf-checks.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../.github/workflows/tflint.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/versions.tf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../windows-vm/versions.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/dependabot.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.github/dependabot.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/workflows/changelog.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.github/workflows/changelog.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/workflows/readme.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.github/workflows/readme.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/workflows/semantic-releaser.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/workflows/static-checks.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.github/workflows/tfsec.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.github/workflows/tfsec.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.pre-commit-config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../.pre-commit-config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/../../LICENSE" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../README.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../README.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example.tf" beforeDir="false" afterPath="$PROJECT_DIR$/example.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outputs.tf" beforeDir="false" afterPath="$PROJECT_DIR$/outputs.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../windows-vm/example.tf" beforeDir="false" afterPath="$PROJECT_DIR$/../windows-vm/example.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../windows-vm/outputs.tf" beforeDir="false" afterPath="$PROJECT_DIR$/../windows-vm/outputs.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../_test/virtual_machine_test.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../main.tf" beforeDir="false" afterPath="$PROJECT_DIR$/../../main.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../outputs.tf" beforeDir="false" afterPath="$PROJECT_DIR$/../../outputs.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../variables.tf" beforeDir="false" afterPath="$PROJECT_DIR$/../../variables.tf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../versions.tf" beforeDir="false" afterPath="$PROJECT_DIR$/../../versions.tf" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectId" id="2aXeybKq5aeTP9L1V6MsAarn0oH" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="022ae472-bac8-4db2-a990-9b0178c2b1af" name="Changes" comment="" />
+      <created>1704469607271</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704469607271</updated>
+    </task>
+    <servers />
+  </component>
+</project>
