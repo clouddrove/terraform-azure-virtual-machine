@@ -1,15 +1,15 @@
 output "network_interface_id" {
-  value       = azurerm_network_interface.default[0].id
+  value       = azurerm_network_interface.default[*].id
   description = "The ID of the Network Interface."
 }
 
 output "network_interface_private_ip_addresses" {
-  value       = azurerm_network_interface.default[0].private_ip_addresses
+  value       = azurerm_network_interface.default[*].private_ip_addresses
   description = "The private IP addresses of the network interface."
 }
 
 output "availability_set_id" {
-  value       = azurerm_availability_set.default[0].id
+  value       = azurerm_availability_set.default[*].id
   description = "The ID of the Availability Set."
 }
 
@@ -33,9 +33,8 @@ output "windows_virtual_machine_id" {
   description = "The ID of the Windows Virtual Machine."
 }
 
-
 output "network_interface_sg_association_id" {
-  value       = azurerm_network_interface_security_group_association.default[0].id
+  value       = azurerm_network_interface_security_group_association.default[*].id
   description = "The (Terraform specific) ID of the Association between the Network Interface and the Network Interface."
 }
 

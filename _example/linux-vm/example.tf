@@ -87,6 +87,7 @@ module "security_group" {
 #-----------------------------------------------------------------------------
 module "key_vault" {
   source                      = "clouddrove/key-vault/azure"
+  version                     = "1.1.0"
   name                        = "app"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
@@ -101,8 +102,6 @@ module "key_vault" {
   enable_private_endpoint = true
   ##RBAC
   enable_rbac_authorization = true
-  principal_id              = ["71xxxxxxxxxxxxxxxxxx1166d7c97"]
-  role_definition_name      = ["Key Vault Administrator"]
 }
 
 ##-----------------------------------------------------------------------------
@@ -124,7 +123,7 @@ module "virtual-machine" {
   user_object_id = {
     "user1" = {
       role_definition_name = "Virtual Machine Administrator Login"
-      principal_id         = "xxxxxxxxxxxxxxxxx"
+      principal_id         = "xxxxxxxxxxxxx"
     },
   }
   ## Network Interface
@@ -147,7 +146,7 @@ module "virtual-machine" {
   ip_version        = "IPv4"
   ## Virtual Machine
   vm_size        = "Standard_B1s"
-  public_key     = "vweGBuAqKX+xxxxxxxxxxx" # Enter valid public key here
+  public_key     = "ssh-rsa EqO/kArB4p4KeF+pc84rX5GkM4fn5SsMMpJTZmhhJYA2YW/E" # Enter valid p key here
   admin_username = "ubuntu"
   #  admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching                         = "ReadWrite"
@@ -157,7 +156,7 @@ module "virtual-machine" {
   image_offer                     = "0001-com-ubuntu-server-jammy"
   image_sku                       = "22_04-lts-gen2"
   image_version                   = "latest"
-  enable_disk_encryption_set      = false
+  enable_disk_encryption_set      = true
   key_vault_id                    = module.key_vault.id
   addtional_capabilities_enabled  = true
   ultra_ssd_enabled               = false

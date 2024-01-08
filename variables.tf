@@ -236,7 +236,7 @@ variable "identity_enabled" {
 
 variable "sa_type" {
   type        = string
-  default     = "SystemAssigned"
+  default     = ""
   description = "Specifies the identity type of the Storage Account. At this time the only allowed value is SystemAssigned."
 }
 
@@ -581,7 +581,7 @@ variable "enable_automatic_updates" {
 
 variable "windows_patch_mode" {
   type        = string
-  default     = "AutomaticByOS"
+  default     = "AutomaticByPlatform"
   description = "Optional) Specifies the mode of in-guest patching to this Windows Virtual Machine. Possible values are Manual, AutomaticByOS and AutomaticByPlatform. Defaults to AutomaticByOS. "
 }
 

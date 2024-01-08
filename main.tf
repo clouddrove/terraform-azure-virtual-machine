@@ -282,7 +282,7 @@ resource "azurerm_network_interface_security_group_association" "default" {
 ## Azure Disk Encryption helps protect and safeguard your data to meet your organizational security and compliance commitments.
 ##-----------------------------------------------------------------------------
 resource "azurerm_disk_encryption_set" "example" {
-  count               = var.enable_disk_encryption_set ? var.machine_count : 0
+  count               = var.enabled && var.enable_disk_encryption_set ? var.machine_count : 0
   name                = var.vm_addon_name == null ? format("vm-%s-dsk-encrpt-%s", module.labels.id, count.index + 1) : format("vm-%s-dsk-encrpt-%s", module.labels.id, var.vm_addon_name)
   resource_group_name = var.resource_group_name
   location            = var.location
@@ -297,15 +297,15 @@ resource "azurerm_disk_encryption_set" "example" {
 ## The ID of the Principal (User, Group or Service Principal) to assign the Role Definition to. Changing this forces a new resource to be created.
 ##-----------------------------------------------------------------------------
 resource "azurerm_role_assignment" "azurerm_disk_encryption_set_key_vault_access" {
-  count                = var.enable_disk_encryption_set ? var.machine_count : 0
+  count                = var.enabled && var.enable_disk_encryption_set ? var.machine_count : 0
   scope                = var.key_vault_id
   role_definition_name = var.role_definition_name
   principal_id         = azurerm_disk_encryption_set.example[0].identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "ad_role_assignment" {
-  for_each             = var.user_object_id
-  scope                = azurerm_linux_virtual_machine.default[0].id
+  for_each             = var.enabled ? var.user_object_id : {}
+  scope                = var.is_vm_windows ? azurerm_windows_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
   role_definition_name = lookup(each.value, "role_definition_name", "")
   principal_id         = lookup(each.value, "principal_id", "")
 }
@@ -357,11 +357,11 @@ resource "azurerm_key_vault_access_policy" "main" {
 ##  This is where you are creating the managed disk. The name argument specifies the name of the disk.
 ##-----------------------------------------------------------------------------
 resource "azurerm_managed_disk" "data_disk" {
-  for_each = { for it, data_disk in var.data_disks : data_disk.name => {
+  for_each = var.enabled ? { for it, data_disk in var.data_disks : data_disk.name => {
     it : it,
     data_disk : data_disk,
     }
-  }
+  } : {}
   name                   = format("%s-%s-managed-disk", module.labels.id, each.value.data_disk.name)
   resource_group_name    = var.resource_group_name
   location               = var.location
@@ -378,11 +378,11 @@ resource "azurerm_managed_disk" "data_disk" {
 ## Manages attaching a Disk to a Virtual Machine.
 ##-----------------------------------------------------------------------------
 resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
-  for_each = { for it, data_disk in var.data_disks : data_disk.name => {
+  for_each = var.enabled ? { for it, data_disk in var.data_disks : data_disk.name => {
     it : it,
     data_disk : data_disk,
     }
-  }
+  } : {}
   managed_disk_id    = azurerm_managed_disk.data_disk[each.key].id
   virtual_machine_id = var.is_vm_windows ? azurerm_windows_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
   lun                = each.value.it
@@ -393,9 +393,9 @@ resource "azurerm_virtual_machine_data_disk_attachment" "data_disk" {
 ## azurerm_virtual_machine_extension. Manages a Virtual Machine Extension to provide post deployment configuration and run automated tasks.
 ##-----------------------------------------------------------------------------
 resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
-  for_each                   = { for extension in var.extensions : extension.extension_name => extension }
+  for_each                   = var.enabled ? { for extension in var.extensions : extension.extension_name => extension } : {}
   name                       = each.value.extension_name
-  virtual_machine_id         = var.is_vm_linux != true ? azurerm_windows_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
+  virtual_machine_id         = var.is_vm_windows ? azurerm_windows_virtual_machine.win_vm[0].id : azurerm_linux_virtual_machine.default[0].id
   publisher                  = each.value.extension_publisher
   type                       = each.value.extension_type
   type_handler_version       = each.value.extension_type_handler_version
@@ -410,7 +410,7 @@ resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
 ## This resource allows you to manage a Diagnostic Setting for an Azure resource.
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
-  count                          = var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
+  count                          = var.enabled && var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
   name                           = var.vm_addon_name == null ? format("%s-vm-pip-%s-diagnostic-log", module.labels.id, count.index + 1) : format("%s-vm-pip-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
   target_resource_id             = join("", azurerm_public_ip.default[0].id)
   storage_account_id             = var.storage_account_id
@@ -451,10 +451,10 @@ resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
 }
 
 ##-----------------------------------------------------------------------------
-## This resource allows you to manage a Diagnostic Setting for an Azure resource.
+## This resource allows you to manage a Diaresourcegnostic Setting for an Azure resource.
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
-  count                          = var.diagnostic_setting_enable ? var.machine_count : 0
+  count                          = var.enabled && var.diagnostic_setting_enable ? var.machine_count : 0
   name                           = var.vm_addon_name == null ? format("%s-network-interface-%s-diagnostic-log", module.labels.id, count.index + 1) : format("%s-network-interface-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
   target_resource_id             = azurerm_network_interface.default[0].id
   storage_account_id             = var.storage_account_id

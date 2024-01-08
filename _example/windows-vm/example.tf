@@ -112,6 +112,14 @@ module "virtual-machine" {
   create_option       = "Empty"
   disk_size_gb        = 128
   provision_vm_agent  = true
+  identity_enabled    = true
+  sa_type             = "SystemAssigned"
+  user_object_id = {
+    "user1" = {
+      role_definition_name = "Virtual Machine Administrator Login"
+      principal_id         = "3xxxxxxxxxxxxxxxxxxxe"
+    },
+  }
   ## Network Interface
   subnet_id                     = module.subnet.default_subnet_id
   private_ip_address_version    = "IPv4"
@@ -135,7 +143,7 @@ module "virtual-machine" {
   admin_password    = "Password@123"
   image_publisher   = "MicrosoftWindowsServer"
   image_offer       = "WindowsServer"
-  image_sku         = "2019-Datacenter"
+  image_sku         = "2019-datacenter"
   image_version     = "latest"
   caching           = "ReadWrite"
   data_disks = [
@@ -148,29 +156,12 @@ module "virtual-machine" {
 
   # Extension
   extensions = [{
-    extension_publisher            = "Microsoft.Azure.Security"
-    extension_name                 = "CustomExt"
-    extension_type                 = "IaaSAntimalware"
-    extension_type_handler_version = "1.3"
+    extension_publisher            = "Microsoft.Azure.ActiveDirectory"
+    extension_name                 = "AADLogin"
+    extension_type                 = "AADLoginForWindows"
+    extension_type_handler_version = "1.0"
     auto_upgrade_minor_version     = true
     automatic_upgrade_enabled      = false
-    settings                       = <<SETTINGS
-                                        {
-                                          "AntimalwareEnabled": true,
-                                          "RealtimeProtectionEnabled": "true",
-                                          "ScheduledScanSettings": {
-                                              "isEnabled": "false",
-                                              "day": "7",
-                                              "time": "120",
-                                              "scanType": "Quick"
-                                          },
-                                          "Exclusions": {
-                                              "Extensions": "",
-                                              "Paths": "",
-                                              "Processes": ""
-                                          }
-                                        }
-                                      SETTINGS
   }]
   #### enable diagnostic setting
   diagnostic_setting_enable  = false
