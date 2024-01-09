@@ -2,6 +2,8 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_client_config" "current_client_config" {}
+
 ##-----------------------------------------------------------------------------
 ## Resource Group module call
 ## Resource group in which all resources will be deployed.
@@ -12,7 +14,7 @@ module "resource_group" {
   name        = "vm"
   environment = "test"
   label_order = ["name", "environment"]
-  location    = "Canada Central"
+  location    = "Norway East"
 }
 
 ##-----------------------------------------------------------------------------
@@ -93,15 +95,18 @@ module "key_vault" {
   label_order                 = ["name", "environment", ]
   resource_group_name         = module.resource_group.resource_group_name
   location                    = module.resource_group.resource_group_location
-  purge_protection_enabled    = true
-  enabled_for_disk_encryption = true
-  sku_name                    = "standard"
+  admin_objects_ids           = [data.azurerm_client_config.current_client_config.object_id]
   subnet_id                   = module.subnet.default_subnet_id[0]
   virtual_network_id          = module.vnet.vnet_id
   #private endpoint
-  enable_private_endpoint = true
+  enable_private_endpoint = false
   ##RBAC
   enable_rbac_authorization = true
+  network_acls = {
+    bypass         = "AzureServices"
+    default_action = "Deny"
+    ip_rules       = ["0.0.0.0/0"]
+  }
 }
 
 ##-----------------------------------------------------------------------------
@@ -109,6 +114,7 @@ module "key_vault" {
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
   source                          = "../../"
+  depends_on                      = [ module.key_vault ]
   name                            = "app"
   environment                     = "test"
   label_order                     = ["environment", "name"]
@@ -123,7 +129,7 @@ module "virtual-machine" {
   user_object_id = {
     "user1" = {
       role_definition_name = "Virtual Machine Administrator Login"
-      principal_id         = "xxxxxxxxxxxxx"
+      principal_id         = data.azurerm_client_config.current_client_config.object_id
     },
   }
   ## Network Interface
@@ -137,8 +143,8 @@ module "virtual-machine" {
   network_security_group_id    = module.security_group.id
   ## Availability Set
   availability_set_enabled     = true
-  platform_update_domain_count = 7
-  platform_fault_domain_count  = 3
+  platform_update_domain_count = 1
+  platform_fault_domain_count  = 2
   ## Public IP
   public_ip_enabled = true
   sku               = "Basic"
@@ -146,7 +152,7 @@ module "virtual-machine" {
   ip_version        = "IPv4"
   ## Virtual Machine
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa EqO/kArB4p4KeF+pc84rX5GkM4fn5SsMMpJTZmhhJYA2YW/E" # Enter valid p key here
+  public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCkD00OFHScro8u5QvQ5mlflacl+u51CslvuEuKMFh5FYZJc8i0nJhwMk//Lu707kfA1f/5gQQd62q0s+sUOrMURIU2u4HYnwIwexyU5LfJ11gBIaVZWLS5KiFm8lzQ8On+2T0nbiLrhUOeUTySheC+MCEHvUARsOXx30/cnpvMGiFOk3HAUSL40Ns9nOzGU/etbfwhligUMMhJMPkLxZFphmRavbijU43bEw4uUA83G4H2m1r7ytVVQ5VPoLDFtEX5FFhmx8gY6cdB869cQj2nzQNblSW8RRc/5u3mt3YXKnoe911ePeEfWDF4vBXMDnVjYLTLVnOaYPjc8BNL8gmEg72xKfPnhCnBSFyhxAjAqlV0N3o64w+bMHS7zHxp7y90GnD8vuoP37v1dPZS6vMc9hnjWJnpTLZptCyW7ayLggKZmgmpgy+O1TW2fQe4Crg3UQ6qWC498YF9k23cW1rrfmnUVWXAttSWhpp07Nab7cEXva8ze4lDrrC0CKxRcg8=" # Enter valid p key here
   admin_username = "ubuntu"
   #  admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching                         = "ReadWrite"
@@ -165,7 +171,7 @@ module "virtual-machine" {
   data_disks = [
     {
       name                 = "disk1"
-      disk_size_gb         = 100
+      disk_size_gb         = 60
       storage_account_type = "StandardSSD_LRS"
     }
   ]
