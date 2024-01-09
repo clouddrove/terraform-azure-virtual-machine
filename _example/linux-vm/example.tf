@@ -90,7 +90,7 @@ module "security_group" {
 module "key_vault" {
   source                      = "clouddrove/key-vault/azure"
   version                     = "1.1.0"
-  name                        = "app"
+  name                        = "app3433"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
   resource_group_name         = module.resource_group.resource_group_name
@@ -152,7 +152,7 @@ module "virtual-machine" {
   ip_version        = "IPv4"
   ## Virtual Machine
   vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCkD00OFHScro8u5QvQ5mlflacl+u51CslvuEuKMFh5FYZJc8i0nJhwMk//Lu707kfA1f/5gQQd62q0s+sUOrMURIU2u4HYnwIwexyU5LfJ11gBIaVZWLS5KiFm8lzQ8On+2T0nbiLrhUOeUTySheC+MCEHvUARsOXx30/cnpvMGiFOk3HAUSL40Ns9nOzGU/etbfwhligUMMhJMPkLxZFphmRavbijU43bEw4uUA83G4H2m1r7ytVVQ5VPoLDFtEX5FFhmx8gY6cdB869cQj2nzQNblSW8RRc/5u3mt3YXKnoe911ePeEfWDF4vBXMDnVjYLTLVnOaYPjc8BNL8gmEg72xKfPnhCnBSFyhxAjAqlV0N3o64w+bMHS7zHxp7y90GnD8vuoP37v1dPZS6vMc9hnjWJnpTLZptCyW7ayLggKZmgmpgy+O1TW2fQe4Crg3UQ6qWC498YF9k23cW1rrfmnUVWXAttSWhpp07Nab7cEXva8ze4lDrrC0CKxRcg8=" # Enter valid p key here
+  public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADDF4vBXMDnVjYLTLVnOa4lDrrC0CKxRcg8=" # Enter valid p key here
   admin_username = "ubuntu"
   #  admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
   caching                         = "ReadWrite"

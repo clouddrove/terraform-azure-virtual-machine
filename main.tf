@@ -283,7 +283,7 @@ resource "azurerm_network_interface_security_group_association" "default" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_disk_encryption_set" "example" {
   count               = var.enabled && var.enable_disk_encryption_set ? var.machine_count : 0
-  name                = var.vm_addon_name == null ? format("vm-%s-dsk-encrpt-%s", module.labels.id, count.index + 1) : format("vm-%s-dsk-encrpt-%s", module.labels.id, var.vm_addon_name)
+  name                = var.vm_addon_name == null ? format("%s-vm-dsk-encrpt-%s", module.labels.id, count.index + 1) : format("vm-%s-dsk-encrpt-%s", module.labels.id, var.vm_addon_name)
   resource_group_name = var.resource_group_name
   location            = var.location
   key_vault_key_id    = var.enable_disk_encryption_set ? azurerm_key_vault_key.example[0].id : null
