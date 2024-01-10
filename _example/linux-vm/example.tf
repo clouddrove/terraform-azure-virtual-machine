@@ -85,7 +85,7 @@ module "security_group" {
 }
 
 ##-----------------------------------------------------------------------------
-## key-vault module call.
+## key-vault module call for disc encryption of virtual machine with cmk.
 #-----------------------------------------------------------------------------
 module "key_vault" {
   source                      = "clouddrove/key-vault/azure"
@@ -107,6 +107,21 @@ module "key_vault" {
     default_action = "Deny"
     ip_rules       = ["0.0.0.0/0"]
   }
+}
+
+##-----------------------------------------------------------------------------
+## log-analytics module call for diagnosis setting 
+#-----------------------------------------------------------------------------
+module "log-analytics" {
+  source                           = "clouddrove/log-analytics/azure"
+  version                          = "1.0.1"
+  name                             = "app"
+  environment                      = "test"
+  label_order                      = ["name", "environment"]
+  create_log_analytics_workspace   = true
+  log_analytics_workspace_sku      = "PerGB2018"
+  resource_group_name              = module.resource_group.resource_group_name
+  log_analytics_workspace_location = module.resource_group.resource_group_location
 }
 
 ##-----------------------------------------------------------------------------
@@ -186,6 +201,6 @@ module "virtual-machine" {
   }]
 
   #### enable diagnostic setting
-  diagnostic_setting_enable  = false
-  log_analytics_workspace_id = ""
+  diagnostic_setting_enable  = true
+  log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
 }

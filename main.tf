@@ -411,39 +411,26 @@ resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
   count                          = var.enabled && var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
-  name                           = var.vm_addon_name == null ? format("%s-vm-pip-%s-diagnostic-log", module.labels.id, count.index + 1) : format("%s-vm-pip-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
-  target_resource_id             = join("", azurerm_public_ip.default[0].id)
+  name                           = var.vm_addon_name == null ? format("%s-vm-pip-diagnostic-log-%s", module.labels.id, count.index + 1) : format("%s-vm-pip-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
+  target_resource_id             = azurerm_public_ip.default[0].id
   storage_account_id             = var.storage_account_id
   eventhub_name                  = var.eventhub_name
   eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
   log_analytics_workspace_id     = var.log_analytics_workspace_id
   log_analytics_destination_type = var.log_analytics_destination_type
-  metric {
-    category = "AllMetrics"
-    enabled  = var.Metric_enable
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.diagnostic_log_days
+  dynamic "metric" {
+    for_each = var.metric_enabled ? ["AllMetrics"] : []
+    content {
+      category = metric.value
+      enabled  = true
     }
   }
-  log {
-    category       = var.category
-    category_group = "AllLogs"
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.diagnostic_log_days
+  dynamic "enabled_log" {
+    for_each = var.pip_logs.enabled ? var.pip_logs.category != null ? var.pip_logs.category : var.pip_logs.category_group : []
+    content {
+      category       = var.pip_logs.category != null ? enabled_log.value : null
+      category_group = var.pip_logs.category == null ? enabled_log.value : null
     }
-    enabled = var.log_enabled
-  }
-
-  log {
-    category       = var.category
-    category_group = "Audit"
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.diagnostic_log_days
-    }
-    enabled = var.log_enabled
   }
   lifecycle {
     ignore_changes = [log_analytics_destination_type]
@@ -455,19 +442,18 @@ resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
   count                          = var.enabled && var.diagnostic_setting_enable ? var.machine_count : 0
-  name                           = var.vm_addon_name == null ? format("%s-network-interface-%s-diagnostic-log", module.labels.id, count.index + 1) : format("%s-network-interface-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
+  name                           = var.vm_addon_name == null ? format("%s-pe-vm-nic-diagnostic-log-%s", module.labels.id, count.index + 1) : format("%s-pe-vm-nic-%s-diagnostic-log-%", module.labels.id, var.vm_addon_name)
   target_resource_id             = azurerm_network_interface.default[0].id
   storage_account_id             = var.storage_account_id
   eventhub_name                  = var.eventhub_name
   eventhub_authorization_rule_id = var.eventhub_authorization_rule_id
   log_analytics_workspace_id     = var.log_analytics_workspace_id
   log_analytics_destination_type = var.log_analytics_destination_type
-  metric {
-    category = "AllMetrics"
-    enabled  = var.Metric_enable
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.days
+  dynamic "metric" {
+    for_each = var.metric_enabled ? ["AllMetrics"] : []
+    content {
+      category = metric.value
+      enabled  = true
     }
   }
   lifecycle {

@@ -521,10 +521,23 @@ variable "diagnostic_log_days" {
   description = " The number of days for which this Retention Policy should apply."
 }
 
-variable "Metric_enable" {
+variable "metric_enabled" {
   type        = bool
   default     = true
   description = "Is this Diagnostic Metric enabled? Defaults to true."
+}
+
+variable "pip_logs" {
+  type = object({
+    enabled        = bool
+    category       = optional(list(string))
+    category_group = optional(list(string))
+  })
+
+  default = {
+    enabled        = true
+    category_group = ["AllLogs"]
+  }
 }
 
 variable "diagnostic_setting_enable" {
