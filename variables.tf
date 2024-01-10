@@ -222,11 +222,6 @@ variable "boot_diagnostics_enabled" {
   description = "Whether boot diagnostics block is enabled."
 }
 
-variable "days" {
-  type        = number
-  default     = 7
-  description = "Specifies the number of days that the blob should be retained, between 1 and 365 days. Defaults to 7."
-}
 
 variable "identity_enabled" {
   type        = bool
@@ -509,18 +504,6 @@ variable "log_analytics_destination_type" {
   description = "Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table."
 }
 
-variable "retention_policy_enabled" {
-  type        = bool
-  default     = false
-  description = "Is this Retention Policy enabled?"
-}
-
-variable "diagnostic_log_days" {
-  type        = number
-  default     = "90"
-  description = " The number of days for which this Retention Policy should apply."
-}
-
 variable "metric_enabled" {
   type        = bool
   default     = true
@@ -548,18 +531,6 @@ variable "diagnostic_setting_enable" {
 variable "log_analytics_workspace_id" {
   type    = string
   default = null
-}
-
-variable "category" {
-  type        = string
-  default     = null
-  description = " The name of a Diagnostic Log Category Group for this Resource."
-}
-
-variable "log_enabled" {
-  type        = string
-  default     = true
-  description = " Is this Diagnostic Log enabled? Defaults to true."
 }
 
 variable "storage_account_id" {
