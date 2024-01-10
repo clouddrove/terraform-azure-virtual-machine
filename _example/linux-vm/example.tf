@@ -88,16 +88,16 @@ module "security_group" {
 ## key-vault module call for disc encryption of virtual machine with cmk.
 #-----------------------------------------------------------------------------
 module "key_vault" {
-  source                      = "clouddrove/key-vault/azure"
-  version                     = "1.1.0"
-  name                        = "app3433"
-  environment                 = "test"
-  label_order                 = ["name", "environment", ]
-  resource_group_name         = module.resource_group.resource_group_name
-  location                    = module.resource_group.resource_group_location
-  admin_objects_ids           = [data.azurerm_client_config.current_client_config.object_id]
-  subnet_id                   = module.subnet.default_subnet_id[0]
-  virtual_network_id          = module.vnet.vnet_id
+  source              = "clouddrove/key-vault/azure"
+  version             = "1.1.0"
+  name                = "app3433"
+  environment         = "test"
+  label_order         = ["name", "environment", ]
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.resource_group_location
+  admin_objects_ids   = [data.azurerm_client_config.current_client_config.object_id]
+  subnet_id           = module.subnet.default_subnet_id[0]
+  virtual_network_id  = module.vnet.vnet_id
   #private endpoint
   enable_private_endpoint = false
   ##RBAC
@@ -129,7 +129,7 @@ module "log-analytics" {
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
   source                          = "../../"
-  depends_on                      = [ module.key_vault ]
+  depends_on                      = [module.key_vault]
   name                            = "app"
   environment                     = "test"
   label_order                     = ["environment", "name"]
