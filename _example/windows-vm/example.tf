@@ -119,22 +119,22 @@ module "virtual-machine" {
     },
   }
   ## Network Interface
-  subnet_id                     = module.subnet.default_subnet_id
-  private_ip_addresses          = ["10.0.1.4"]
+  subnet_id            = module.subnet.default_subnet_id
+  private_ip_addresses = ["10.0.1.4"]
   #nsg
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
   ## Public IP
   public_ip_enabled = true
   ## Virtual Machine
-  computer_name     = "app-win-comp"
-  vm_size           = "Standard_B1s"
-  admin_username    = "azureadmin"
-  admin_password    = "Password@123"
-  image_publisher   = "MicrosoftWindowsServer"
-  image_offer       = "WindowsServer"
-  image_sku         = "2019-datacenter"
-  image_version     = "latest"
+  computer_name   = "app-win-comp"
+  vm_size         = "Standard_B1s"
+  admin_username  = "azureadmin"
+  admin_password  = "Password@123"
+  image_publisher = "MicrosoftWindowsServer"
+  image_offer     = "WindowsServer"
+  image_sku       = "2019-datacenter"
+  image_version   = "latest"
   data_disks = [
     {
       name                 = "disk1"

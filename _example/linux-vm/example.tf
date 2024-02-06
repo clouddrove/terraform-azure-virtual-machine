@@ -128,13 +128,13 @@ module "log-analytics" {
 ## linux virtual-machine module call.
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
-  source                          = "../../"
-  depends_on                      = [module.key_vault]
-  name                            = "app"
-  environment                     = "test"
-  resource_group_name             = module.resource_group.resource_group_name
-  location                        = module.resource_group.resource_group_location
-  is_vm_linux                     = true
+  source              = "../../"
+  depends_on          = [module.key_vault]
+  name                = "app"
+  environment         = "test"
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.resource_group_location
+  is_vm_linux         = true
   user_object_id = {
     "user1" = {
       role_definition_name = "Virtual Machine Administrator Login"
@@ -142,26 +142,26 @@ module "virtual-machine" {
     },
   }
   ## Network Interface
-  subnet_id                     = module.subnet.default_subnet_id
-  private_ip_addresses          = ["10.0.1.4"]
+  subnet_id            = module.subnet.default_subnet_id
+  private_ip_addresses = ["10.0.1.4"]
   #nsg
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
   ## Public IP
   public_ip_enabled = false
   ## Virtual Machine
-  vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa AAAA" 
-  admin_username = "ubuntu"
-  caching                         = "ReadWrite"
-  disk_size_gb                    = 30
-  image_publisher                 = "Canonical"
-  image_offer                     = "0001-com-ubuntu-server-jammy"
-  image_sku                       = "22_04-lts-gen2"
-  image_version                   = "latest"
+  vm_size         = "Standard_B1s"
+  public_key      = "ssh-rsa AAAA"
+  admin_username  = "ubuntu"
+  caching         = "ReadWrite"
+  disk_size_gb    = 30
+  image_publisher = "Canonical"
+  image_offer     = "0001-com-ubuntu-server-jammy"
+  image_sku       = "22_04-lts-gen2"
+  image_version   = "latest"
 
-  enable_disk_encryption_set      = true
-  key_vault_id                    = module.key_vault.id
+  enable_disk_encryption_set = true
+  key_vault_id               = module.key_vault.id
   data_disks = [
     {
       name                 = "disk1"

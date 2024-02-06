@@ -105,7 +105,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   disable_password_authentication = var.disable_password_authentication
   network_interface_ids           = [element(azurerm_network_interface.default[*].id, count.index)]
   source_image_id                 = var.source_image_id != null ? var.source_image_id : null
-  availability_set_id             = var.availability_set_enabled ?  azurerm_availability_set.default[0].id : null
+  availability_set_id             = var.availability_set_enabled ? azurerm_availability_set.default[0].id : null
   proximity_placement_group_id    = var.proximity_placement_group_id
   encryption_at_host_enabled      = var.enable_encryption_at_host
   patch_assessment_mode           = var.patch_assessment_mode
