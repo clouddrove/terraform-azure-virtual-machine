@@ -2,6 +2,8 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_client_config" "current_client_config" {}
+
 ##-----------------------------------------------------------------------------
 ## Resource Group module call
 ## Resource group in which all resources will be deployed.
@@ -109,34 +111,22 @@ module "virtual-machine" {
   machine_count       = 1
   resource_group_name = module.resource_group.resource_group_name
   location            = module.resource_group.resource_group_location
-  create_option       = "Empty"
   disk_size_gb        = 128
-  provision_vm_agent  = true
-  identity_enabled    = true
-  sa_type             = "SystemAssigned"
   user_object_id = {
     "user1" = {
       role_definition_name = "Virtual Machine Administrator Login"
-      principal_id         = "3xxxxxxxxxxxxxxxxxxxe"
+      principal_id         = data.azurerm_client_config.current_client_config.object_id
     },
   }
   ## Network Interface
   subnet_id                     = module.subnet.default_subnet_id
-  private_ip_address_version    = "IPv4"
-  private_ip_address_allocation = "Dynamic"
-  primary                       = true
+  private_ip_addresses          = ["10.0.1.4"]
   #nsg
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
-  ## Availability Set
-  availability_set_enabled     = true
-  platform_update_domain_count = 7
-  platform_fault_domain_count  = 3
   ## Public IP
   public_ip_enabled = true
-  sku               = "Basic"
-  allocation_method = "Static"
-  ip_version        = "IPv4"
+  ## Virtual Machine
   computer_name     = "app-win-comp"
   vm_size           = "Standard_B1s"
   admin_username    = "azureadmin"
@@ -145,7 +135,6 @@ module "virtual-machine" {
   image_offer       = "WindowsServer"
   image_sku         = "2019-datacenter"
   image_version     = "latest"
-  caching           = "ReadWrite"
   data_disks = [
     {
       name                 = "disk1"

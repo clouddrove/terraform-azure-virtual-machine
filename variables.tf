@@ -32,13 +32,13 @@ variable "repository" {
 
 variable "enabled" {
   type        = bool
-  default     = false
+  default     = true
   description = "Flag to control the module creation."
 }
 
 variable "machine_count" {
   type        = number
-  default     = 0
+  default     = 1
   description = "Number of Virtual Machines to create."
 }
 
@@ -182,13 +182,13 @@ variable "sku" {
 
 variable "allocation_method" {
   type        = string
-  default     = ""
+  default     = "Static"
   description = "Defines the allocation method for this IP address. Possible values are Static or Dynamic."
 }
 
 variable "ip_version" {
   type        = string
-  default     = ""
+  default     = "IPv4"
   description = "The IP Version to use, IPv6 or IPv4."
 }
 
@@ -225,14 +225,8 @@ variable "boot_diagnostics_enabled" {
 
 variable "identity_enabled" {
   type        = bool
-  default     = false
+  default     = true
   description = "Whether identity block is enabled."
-}
-
-variable "sa_type" {
-  type        = string
-  default     = ""
-  description = "Specifies the identity type of the Storage Account. At this time the only allowed value is SystemAssigned."
 }
 
 variable "vm_size" {
@@ -255,7 +249,7 @@ variable "license_type" {
 
 variable "disable_password_authentication" {
   type        = bool
-  default     = false
+  default     = true
   description = "Specifies whether password authentication should be disabled."
 }
 
@@ -291,7 +285,7 @@ variable "ultra_ssd_enabled" {
 
 variable "vm_identity_type" {
   type        = string
-  default     = ""
+  default     = "SystemAssigned"
   description = "The Managed Service Identity Type of this Virtual Machine. Possible values are SystemAssigned and UserAssigned."
 }
 
@@ -365,7 +359,7 @@ variable "create_option" {
 
 variable "caching" {
   type        = string
-  default     = ""
+  default     = "ReadWrite"
   description = "Specifies the caching requirements for the OS Disk. Possible values include None, ReadOnly and ReadWrite."
 }
 
@@ -377,7 +371,7 @@ variable "computer_name" {
 
 variable "disk_size_gb" {
   type        = number
-  default     = 8
+  default     = 30
   description = "Specifies the size of the OS Disk in gigabytes."
 }
 
@@ -389,7 +383,7 @@ variable "write_accelerator_enabled" {
 
 variable "storage_image_reference_enabled" {
   type        = bool
-  default     = false
+  default     = true
   description = "Whether storage image reference is enabled."
 }
 
@@ -419,7 +413,7 @@ variable "image_sku" {
 
 variable "image_version" {
   type        = string
-  default     = ""
+  default     = "latest"
   description = "Specifies the version of the image used to create the virtual machine."
 }
 
@@ -472,7 +466,7 @@ variable "key_vault_id" {
 
 variable "enable_encryption_at_host" {
   type        = bool
-  default     = false
+  default     = true
   description = "Flag to control Disk Encryption at host level"
 }
 
