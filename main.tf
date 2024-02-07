@@ -16,7 +16,7 @@ module "labels" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_interface" "default" {
   count                         = var.enabled ? var.machine_count : 0
-  name                          = var.vm_addon_name == null ? format("%s-network-interface-%s", module.labels.id, count.index + 1) : format("%s-network-interface-%s", module.labels.id, var.vm_addon_name)
+  name                          = var.vm_addon_name == null ? format("%s-nic-%s", module.labels.id, count.index + 1) : format("%s-nic-%s", module.labels.id, var.vm_addon_name)
   resource_group_name           = var.resource_group_name
   location                      = var.location
   dns_servers                   = var.dns_servers
@@ -26,7 +26,7 @@ resource "azurerm_network_interface" "default" {
   tags                          = module.labels.tags
 
   ip_configuration {
-    name                          = var.vm_addon_name == null ? format("%s-ip-configuration-%s", module.labels.id, count.index + 1) : format("%s-ip-configuration-%s", module.labels.id, var.vm_addon_name)
+    name                          = var.vm_addon_name == null ? format("%s-ip-config-%s", module.labels.id, count.index + 1) : format("%s-ip-config-%s", module.labels.id, var.vm_addon_name)
     subnet_id                     = var.private_ip_address_version == "IPv4" ? element(var.subnet_id, count.index) : ""
     private_ip_address_version    = var.private_ip_address_version
     private_ip_address_allocation = var.private_ip_address_allocation
@@ -48,7 +48,7 @@ resource "azurerm_network_interface" "default" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_availability_set" "default" {
   count                        = var.enabled && var.availability_set_enabled ? 1 : 0
-  name                         = var.vm_addon_name == null ? format("%s-availability-set", module.labels.id) : format("%s-availability-set-%s", module.labels.id, var.vm_addon_name)
+  name                         = var.vm_addon_name == null ? format("%s-vm-availability-set", module.labels.id) : format("%s-vm-availability-set-%s", module.labels.id, var.vm_addon_name)
   resource_group_name          = var.resource_group_name
   location                     = var.location
   platform_update_domain_count = var.platform_update_domain_count
@@ -70,7 +70,7 @@ resource "azurerm_availability_set" "default" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_public_ip" "default" {
   count                   = var.enabled && var.public_ip_enabled ? var.machine_count : 0
-  name                    = var.vm_addon_name == null ? format("%s-public-ip-%s", module.labels.id, count.index + 1) : format("%s-public-ip-%s", module.labels.id, var.vm_addon_name)
+  name                    = var.vm_addon_name == null ? format("%s-pip-%s", module.labels.id, count.index + 1) : format("%s-pip-%s", module.labels.id, var.vm_addon_name)
   resource_group_name     = var.resource_group_name
   location                = var.location
   sku                     = var.sku
@@ -159,7 +159,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   }
 
   os_disk {
-    name                      = var.vm_addon_name == null ? format("%s-storage-os-disk", module.labels.id) : format("%s-storage-os-disk-%s", module.labels.id, var.vm_addon_name)
+    name                      = var.vm_addon_name == null ? format("%s-vm-os-disk", module.labels.id) : format("%s-storage-os-disk-%s", module.labels.id, var.vm_addon_name)
     storage_account_type      = var.os_disk_storage_account_type
     caching                   = var.caching
     disk_encryption_set_id    = var.enable_disk_encryption_set ? azurerm_disk_encryption_set.example[0].id : null
@@ -246,7 +246,7 @@ resource "azurerm_windows_virtual_machine" "win_vm" {
     disk_encryption_set_id    = var.enable_disk_encryption_set ? azurerm_disk_encryption_set.example[0].id : null
     disk_size_gb              = var.disk_size_gb
     write_accelerator_enabled = var.enable_os_disk_write_accelerator
-    name                      = var.vm_addon_name == null ? format("%s-win-storage-data-disk-%s", module.labels.id, count.index + 1) : format("%s-win-storage-data-disk-%s", module.labels.id, var.vm_addon_name)
+    name                      = var.vm_addon_name == null ? format("%s-win-vm-storage-data-disk-%s", module.labels.id, count.index + 1) : format("%s-win-storage-data-disk-%s", module.labels.id, var.vm_addon_name)
   }
   dynamic "source_image_reference" {
     for_each = var.source_image_id != null ? [] : [1]
@@ -315,7 +315,7 @@ resource "azurerm_role_assignment" "ad_role_assignment" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_key_vault_key" "example" {
   count        = var.enabled && var.enable_disk_encryption_set ? var.machine_count : 0
-  name         = var.vm_addon_name == null ? format("vm-%s-vault-key-%s", module.labels.id, count.index + 1) : format("vm-%s-vault-key-%s", module.labels.id, var.vm_addon_name)
+  name         = var.vm_addon_name == null ? format("%s-vm-vault-key-%s", module.labels.id, count.index + 1) : format("vm-%s-vault-key-%s", module.labels.id, var.vm_addon_name)
   key_vault_id = var.key_vault_id
   key_type     = var.key_type
   key_size     = var.key_size
@@ -362,7 +362,7 @@ resource "azurerm_managed_disk" "data_disk" {
     data_disk : data_disk,
     }
   } : {}
-  name                   = format("%s-%s-managed-disk", module.labels.id, each.value.data_disk.name)
+  name                   = format("%s-%s-vm-managed-disk", module.labels.id, each.value.data_disk.name)
   resource_group_name    = var.resource_group_name
   location               = var.location
   storage_account_type   = lookup(each.value.data_disk, "storage_account_type", "StandardSSD_LRS")
@@ -411,7 +411,7 @@ resource "azurerm_virtual_machine_extension" "vm_insight_monitor_agent" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
   count                          = var.enabled && var.diagnostic_setting_enable && var.public_ip_enabled ? var.machine_count : 0
-  name                           = var.vm_addon_name == null ? format("%s-vm-pip-diagnostic-log-%s", module.labels.id, count.index + 1) : format("%s-vm-pip-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
+  name                           = var.vm_addon_name == null ? format("%s-vm-pip-diag-log-%s", module.labels.id, count.index + 1) : format("%s-vm-pip-%s-diagnostic-log", module.labels.id, var.vm_addon_name)
   target_resource_id             = azurerm_public_ip.default[0].id
   storage_account_id             = var.storage_account_id
   eventhub_name                  = var.eventhub_name
@@ -442,7 +442,7 @@ resource "azurerm_monitor_diagnostic_setting" "pip_gw" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
   count                          = var.enabled && var.diagnostic_setting_enable ? var.machine_count : 0
-  name                           = var.vm_addon_name == null ? format("%s-pe-vm-nic-diagnostic-log-%s", module.labels.id, count.index + 1) : format("%s-pe-vm-nic-%s-diagnostic-log-%", module.labels.id, var.vm_addon_name)
+  name                           = var.vm_addon_name == null ? format("%s-vm-pe-nic-diag-log-%s", module.labels.id, count.index + 1) : format("%s-vm-pe-nic-%s-diagnostic-log-%", module.labels.id, var.vm_addon_name)
   target_resource_id             = azurerm_network_interface.default[0].id
   storage_account_id             = var.storage_account_id
   eventhub_name                  = var.eventhub_name
