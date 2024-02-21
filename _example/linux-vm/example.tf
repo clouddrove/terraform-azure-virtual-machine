@@ -90,7 +90,7 @@ module "security_group" {
 module "key_vault" {
   source              = "clouddrove/key-vault/azure"
   version             = "1.1.0"
-  name                = "app3433"
+  name                = "app399433"
   environment         = "test"
   label_order         = ["name", "environment", ]
   resource_group_name = module.resource_group.resource_group_name
@@ -128,19 +128,13 @@ module "log-analytics" {
 ## linux virtual-machine module call.
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
-  source                          = "../../"
-  depends_on                      = [module.key_vault]
-  name                            = "app"
-  environment                     = "test"
-  label_order                     = ["environment", "name"]
-  is_vm_linux                     = true
-  enabled                         = true
-  machine_count                   = 1
-  resource_group_name             = module.resource_group.resource_group_name
-  location                        = module.resource_group.resource_group_location
-  disable_password_authentication = true
-  identity_enabled                = true
-  vm_identity_type                = "SystemAssigned"
+  source              = "../../"
+  depends_on          = [module.key_vault]
+  name                = "app"
+  environment         = "test"
+  resource_group_name = module.resource_group.resource_group_name
+  location            = module.resource_group.resource_group_location
+  is_vm_linux         = true
   user_object_id = {
     "user1" = {
       role_definition_name = "Virtual Machine Administrator Login"
@@ -148,41 +142,26 @@ module "virtual-machine" {
     },
   }
   ## Network Interface
-  subnet_id                     = module.subnet.default_subnet_id
-  private_ip_address_version    = "IPv4"
-  private_ip_address_allocation = "Static"
-  primary                       = true
-  private_ip_addresses          = ["10.0.1.4"]
+  subnet_id            = module.subnet.default_subnet_id
+  private_ip_addresses = ["10.0.1.4"]
   #nsg
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
-  ## Availability Set
-  availability_set_enabled     = true
-  platform_update_domain_count = 1
-  platform_fault_domain_count  = 2
   ## Public IP
-  public_ip_enabled = true
-  sku               = "Basic"
-  allocation_method = "Static"
-  ip_version        = "IPv4"
+  public_ip_enabled = false
   ## Virtual Machine
-  vm_size        = "Standard_B1s"
-  public_key     = "ssh-rsa AAAAB3NzaC1yc2EAAAADDF4vBXMDnVjYLTLVnOa4lDrrC0CKxRcg8=" # Enter valid p key here
-  admin_username = "ubuntu"
-  #  admin_password                  = "P@ssw0rd!123!" # It is compulsory when disable_password_authentication = false
-  caching                         = "ReadWrite"
-  disk_size_gb                    = 30
-  storage_image_reference_enabled = true
-  image_publisher                 = "Canonical"
-  image_offer                     = "0001-com-ubuntu-server-jammy"
-  image_sku                       = "22_04-lts-gen2"
-  image_version                   = "latest"
-  enable_disk_encryption_set      = true
-  key_vault_id                    = module.key_vault.id
-  addtional_capabilities_enabled  = true
-  ultra_ssd_enabled               = false
-  enable_encryption_at_host       = true
-  key_vault_rbac_auth_enabled     = false
+  vm_size         = "Standard_B1s"
+  public_key      = "ssh-rsa AAAA"
+  admin_username  = "ubuntu"
+  caching         = "ReadWrite"
+  disk_size_gb    = 30
+  image_publisher = "Canonical"
+  image_offer     = "0001-com-ubuntu-server-jammy"
+  image_sku       = "22_04-lts-gen2"
+  image_version   = "latest"
+
+  enable_disk_encryption_set = true
+  key_vault_id               = module.key_vault.id
   data_disks = [
     {
       name                 = "disk1"
