@@ -151,7 +151,7 @@ module "virtual-machine" {
   public_ip_enabled = true
   ## Virtual Machine
   vm_size         = "Standard_B1s"
-  public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/e5bluEqTbb3qtuoKh1qEXMP4bk6QtqPrbhg7bMYQjJChmzvuA/aqA8gkQ48lweoFZMd7yr/ylhBPXvpYQ450INW6CNksatr4+z+EXHzyJ3MBTLSWlFc+ut6ji6Fglgkk3fe4sJw2fPZlf3FWFkomLJ3dIOIHyHQO6IaL9ZP22TRSPegSceNC30XF4xz1nHYiqNlZVq/COMHDtammwq8VnitkP6lRbokeJ1HlNBaJygUHlzYKrg8nguxGph3rlG9g+2+xAYf/qHQ/8k14xUMac7JBORnv+HAI+YHYCRYlQVXg635Bnj83jWmDK5Wed98O9ORARv70UN8Bj46247cdkeXXOAslUW19RQj0BA+QYRRvsXfLqlNX/Wq9V5yp66wO4QZV/2wvmoUwSELz6fn+qQvdBbs8IN9K7oJz2nl43Dth0vLnn8IrG7V2PfgW1g4WHjK5/GJXfyZXEYiM5Aye4W8V24g0AnunjIldBTnpofT6q4ki9bXx6en9EeBYB6E="
+  public_key      = "ssh-rsa AAAA"
   admin_username  = "ubuntu"
   caching         = "ReadWrite"
   disk_size_gb    = 30
@@ -180,7 +180,7 @@ module "virtual-machine" {
   }]
 
   #### enable diagnostic setting
-  diagnostic_setting_enable  = false
+  diagnostic_setting_enable  = true
   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
 
   #vm With User Data
