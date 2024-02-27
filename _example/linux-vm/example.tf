@@ -90,7 +90,7 @@ module "security_group" {
 module "key_vault" {
   source              = "clouddrove/key-vault/azure"
   version             = "1.1.0"
-  name                = "app399433"
+  name                = "hello55"
   environment         = "test"
   label_order         = ["name", "environment", ]
   resource_group_name = module.resource_group.resource_group_name
@@ -148,10 +148,10 @@ module "virtual-machine" {
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
   ## Public IP
-  public_ip_enabled = false
+  public_ip_enabled = true
   ## Virtual Machine
   vm_size         = "Standard_B1s"
-  public_key      = "ssh-rsa AAAA"
+  public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC/e5bluEqTbb3qtuoKh1qEXMP4bk6QtqPrbhg7bMYQjJChmzvuA/aqA8gkQ48lweoFZMd7yr/ylhBPXvpYQ450INW6CNksatr4+z+EXHzyJ3MBTLSWlFc+ut6ji6Fglgkk3fe4sJw2fPZlf3FWFkomLJ3dIOIHyHQO6IaL9ZP22TRSPegSceNC30XF4xz1nHYiqNlZVq/COMHDtammwq8VnitkP6lRbokeJ1HlNBaJygUHlzYKrg8nguxGph3rlG9g+2+xAYf/qHQ/8k14xUMac7JBORnv+HAI+YHYCRYlQVXg635Bnj83jWmDK5Wed98O9ORARv70UN8Bj46247cdkeXXOAslUW19RQj0BA+QYRRvsXfLqlNX/Wq9V5yp66wO4QZV/2wvmoUwSELz6fn+qQvdBbs8IN9K7oJz2nl43Dth0vLnn8IrG7V2PfgW1g4WHjK5/GJXfyZXEYiM5Aye4W8V24g0AnunjIldBTnpofT6q4ki9bXx6en9EeBYB6E="
   admin_username  = "ubuntu"
   caching         = "ReadWrite"
   disk_size_gb    = 30
@@ -180,6 +180,9 @@ module "virtual-machine" {
   }]
 
   #### enable diagnostic setting
-  diagnostic_setting_enable  = true
+  diagnostic_setting_enable  = false
   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
+
+  #vm With User Data
+  user_data = file("user-data.sh")
 }

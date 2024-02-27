@@ -607,3 +607,8 @@ variable "user_object_id" {
   default     = {}
   description = "The ID of the Principal (User, Group or Service Principal) to assign the Role Definition to. Changing this forces a new resource to be created."
 }
+variable "user_data" {
+  type        = string
+  default     = ""
+  description = "(Optional) A string of the desired User Data for the vm."
+}
