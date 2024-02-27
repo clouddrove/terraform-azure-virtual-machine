@@ -609,6 +609,6 @@ variable "user_object_id" {
 }
 variable "user_data" {
   type        = string
-  default     = ""
+  default     = "path/to/user-data.sh" // Adjust this path accordingly
   description = "(Optional) A string of the desired User Data for the vm."
 }
