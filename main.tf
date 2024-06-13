@@ -99,6 +99,7 @@ resource "azurerm_linux_virtual_machine" "default" {
   name                            = var.vm_addon_name == null ? format("%s-virtual-machine-%s", module.labels.id, count.index + 1) : format("%s-virtual-machine-%s", module.labels.id, var.vm_addon_name)
   resource_group_name             = var.resource_group_name
   location                        = var.location
+  user_data                       = base64encode(var.user_data)
   size                            = var.vm_size
   admin_username                  = var.admin_username
   admin_password                  = var.disable_password_authentication == true ? null : var.admin_password
@@ -177,6 +178,7 @@ resource "azurerm_linux_virtual_machine" "default" {
       version   = var.custom_image_id == "" ? var.image_version : ""
     }
   }
+
 
   timeouts {
     create = var.create
