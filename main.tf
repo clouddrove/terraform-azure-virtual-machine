@@ -15,15 +15,15 @@ module "labels" {
 ## Terraform resource to create a network interface for virtual machine.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_interface" "default" {
-  count                         = var.enabled ? var.machine_count : 0
-  name                          = var.vm_addon_name == null ? format("%s-nic-%s", module.labels.id, count.index + 1) : format("%s-nic-%s", module.labels.id, var.vm_addon_name)
-  resource_group_name           = var.resource_group_name
-  location                      = var.location
-  dns_servers                   = var.dns_servers
-  enable_ip_forwarding          = var.enable_ip_forwarding
-  enable_accelerated_networking = var.enable_accelerated_networking
-  internal_dns_name_label       = var.internal_dns_name_label
-  tags                          = module.labels.tags
+  count                          = var.enabled ? var.machine_count : 0
+  name                           = var.vm_addon_name == null ? format("%s-nic-%s", module.labels.id, count.index + 1) : format("%s-nic-%s", module.labels.id, var.vm_addon_name)
+  resource_group_name            = var.resource_group_name
+  location                       = var.location
+  dns_servers                    = var.dns_servers
+  ip_forwarding_enabled          = var.enable_ip_forwarding
+  accelerated_networking_enabled = var.enable_accelerated_networking
+  internal_dns_name_label        = var.internal_dns_name_label
+  tags                           = module.labels.tags
 
   ip_configuration {
     name                          = var.vm_addon_name == null ? format("%s-ip-config-%s", module.labels.id, count.index + 1) : format("%s-ip-config-%s", module.labels.id, var.vm_addon_name)
