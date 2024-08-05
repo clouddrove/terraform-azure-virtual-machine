@@ -89,7 +89,7 @@ module "security_group" {
 #-----------------------------------------------------------------------------
 module "key_vault" {
   source                      = "clouddrove/key-vault/azure"
-  version                     = "1.1.0"
+  version                     = "1.2.0"
   name                        = "vae59d6058"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
