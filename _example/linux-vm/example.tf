@@ -35,7 +35,7 @@ module "vnet" {
 ##-----------------------------------------------------------------------------
 module "subnet" {
   source               = "clouddrove/subnet/azure"
-  version              = "1.1.0"
+  version              = "1.2.1"
   name                 = "app"
   environment          = "test"
   label_order          = ["name", "environment"]
@@ -88,25 +88,34 @@ module "security_group" {
 ## key-vault module call for disc encryption of virtual machine with cmk.
 #-----------------------------------------------------------------------------
 module "key_vault" {
-  source              = "clouddrove/key-vault/azure"
-  version             = "1.1.0"
-  name                = "app399433"
-  environment         = "test"
-  label_order         = ["name", "environment", ]
-  resource_group_name = module.resource_group.resource_group_name
-  location            = module.resource_group.resource_group_location
-  admin_objects_ids   = [data.azurerm_client_config.current_client_config.object_id]
-  subnet_id           = module.subnet.default_subnet_id[0]
-  virtual_network_id  = module.vnet.vnet_id
+  source                      = "clouddrove/key-vault/azure"
+  version                     = "1.1.0"
+  name                        = "vae59d6058"
+  environment                 = "test"
+  label_order                 = ["name", "environment", ]
+  resource_group_name         = module.resource_group.resource_group_name
+  location                    = module.resource_group.resource_group_location
+  admin_objects_ids           = [data.azurerm_client_config.current_client_config.object_id]
+  virtual_network_id          = module.vnet.vnet_id
+  subnet_id                   = module.subnet.default_subnet_id[0]
+  enable_rbac_authorization   = true
+  enabled_for_disk_encryption = false
   #private endpoint
   enable_private_endpoint = false
-  ##RBAC
-  enable_rbac_authorization = true
-  network_acls = {
-    bypass         = "AzureServices"
-    default_action = "Deny"
-    ip_rules       = ["0.0.0.0/0"]
-  }
+  network_acls            = null
+  ########Following to be uncommnented only when using DNS Zone from different subscription along with existing DNS zone.
+
+  # diff_sub                                      = true
+  # alias                                         = ""
+  # alias_sub                                     = ""
+
+  #########Following to be uncommmented when using DNS zone from different resource group or different subscription.
+  # existing_private_dns_zone                     = ""
+  # existing_private_dns_zone_resource_group_name = ""
+
+  #### enable diagnostic setting
+  diagnostic_setting_enable  = false
+  log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
 }
 
 ##-----------------------------------------------------------------------------
