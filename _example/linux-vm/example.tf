@@ -88,9 +88,8 @@ module "security_group" {
 ## key-vault module call for disc encryption of virtual machine with cmk.
 #-----------------------------------------------------------------------------
 module "key_vault" {
-  source  = "clouddrove/key-vault/azure"
-  version = "1.1.0"
-
+  source                      = "clouddrove/key-vault/azure"
+  version                     = "1.1.0"
   name                        = "vae59d6058"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
@@ -161,7 +160,7 @@ module "virtual-machine" {
   public_ip_enabled = false
   ## Virtual Machine
   vm_size         = "Standard_B1s"
-  public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCbysTkkLhdRS5Zs5aZyGMqaDdoI98KpkOkM/jBpDsRiN/q8omnhgfbYGORj4MRbQhBMWmDxQPzB9vVOJ2oZTtLJonlxLZvkhW0s6KSEn3W5yCNuceDwr/01mjjTquVXCd9lDeBDstuZnx61PCAjzsuQQ3S9rDbIogZayZGcshnRN6qWNm7NNBb6MigMzsbE4QiJbtVNfjL8zbAKV3GlnO9HJ76FKfMdh8Qo9DALOrFyl7YSjOlUOUDyANuntaa9vPKB5qgSvraXcuBYg/zlrLmP/IyFmPiVfyJKK89vBTUskOP+e53gxs0q0W7W2xbQrbkcc7n4ivTDGi6VRRnf0tka3FP5GoRoHpz4WBgLUM2tATYl0TynusQO6mNGr5meS90A7RU18C6WVB56ggmFA10xL4ZHS+Xi0PrgHEgtEPP2qhqF/5IiakBVFOguVNX4BOoSAHpSXNAphpRdL19AfCarwL2Mue7lMz03KmiWFnC8K60Ma1XB7Do4GD/c/oUR4c="
+  public_key      = "ssh-rsa AAAA"
   admin_username  = "ubuntu"
   caching         = "ReadWrite"
   disk_size_gb    = 30
