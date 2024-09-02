@@ -157,7 +157,7 @@ module "virtual-machine" {
   network_interface_sg_enabled = true
   network_security_group_id    = module.security_group.id
   ## Public IP
-  public_ip_enabled = false
+  public_ip_enabled = true
   ## Virtual Machine
   vm_size         = "Standard_B1s"
   public_key      = "ssh-rsa AAAA"
@@ -191,4 +191,7 @@ module "virtual-machine" {
   #### enable diagnostic setting
   diagnostic_setting_enable  = true
   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
+
+  #vm With User Data
+  user_data = file("user-data.sh")
 }
