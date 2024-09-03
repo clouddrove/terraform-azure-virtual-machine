@@ -88,7 +88,12 @@ module "security_group" {
 ## key-vault module call for disc encryption of virtual machine with cmk.
 #-----------------------------------------------------------------------------
 module "key_vault" {
-  source                      = "clouddrove/key-vault/azure"
+  source = "clouddrove/key-vault/azure"
+  providers = {
+
+    azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
+    azurerm.main_sub = azurerm
+  }
   version                     = "1.2.0"
   name                        = "vae59d6058"
   environment                 = "test"
