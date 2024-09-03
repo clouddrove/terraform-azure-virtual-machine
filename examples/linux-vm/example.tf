@@ -1,5 +1,13 @@
 provider "azurerm" {
   features {}
+  subscription_id            = "01111111111110-11-11-11-11"
+  skip_provider_registration = "true"
+}
+provider "azurerm" {
+  features {}
+  alias                      = "peer"
+  subscription_id            = "01111111111110-11-11-11-11"
+  skip_provider_registration = "true"
 }
 
 data "azurerm_client_config" "current_client_config" {}
