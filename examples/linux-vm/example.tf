@@ -1,5 +1,13 @@
 provider "azurerm" {
   features {}
+  subscription_id            = "01111111111110-11-11-11-11"
+  skip_provider_registration = "true"
+}
+provider "azurerm" {
+  features {}
+  alias                      = "peer"
+  subscription_id            = "01111111111110-11-11-11-11"
+  skip_provider_registration = "true"
 }
 
 data "azurerm_client_config" "current_client_config" {}
@@ -88,7 +96,12 @@ module "security_group" {
 ## key-vault module call for disc encryption of virtual machine with cmk.
 #-----------------------------------------------------------------------------
 module "key_vault" {
-  source                      = "clouddrove/key-vault/azure"
+  source = "clouddrove/key-vault/azure"
+  providers = {
+
+    azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
+    azurerm.main_sub = azurerm
+  }
   version                     = "1.2.0"
   name                        = "vae59d6058"
   environment                 = "test"
@@ -123,7 +136,7 @@ module "key_vault" {
 #-----------------------------------------------------------------------------
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
-  version                          = "1.0.1"
+  version                          = "1.1.0"
   name                             = "app"
   environment                      = "test"
   label_order                      = ["name", "environment"]
