@@ -1,5 +1,13 @@
 provider "azurerm" {
   features {}
+  subscription_id = "01111111111110-11-11-11-11"
+}
+
+provider "azurerm" {
+  features {}
+  alias           = "peer"
+  subscription_id = "01111111111110-11-11-11-11"
+
 }
 
 data "azurerm_client_config" "current_client_config" {}
@@ -103,6 +111,10 @@ module "security_group" {
 ## windows virtual-machine module call.
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
+  providers = {
+    azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
+    azurerm.main_sub = azurerm
+  }
   source              = "../../"
   name                = "app"
   environment         = "test"
