@@ -111,10 +111,6 @@ module "security_group" {
 ## windows virtual-machine module call.
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
-  providers = {
-    azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
-    azurerm.main_sub = azurerm
-  }
   source              = "../../"
   name                = "app"
   environment         = "test"

@@ -148,10 +148,6 @@ module "log-analytics" {
 ## linux virtual-machine module call.
 ##-----------------------------------------------------------------------------
 module "virtual-machine" {
-  providers = {
-    azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
-    azurerm.main_sub = azurerm
-  }
   source              = "../../"
   depends_on          = [module.key_vault]
   name                = "app"
@@ -175,7 +171,7 @@ module "virtual-machine" {
   public_ip_enabled = true
   ## Virtual Machine
   vm_size         = "Standard_B1s"
-  public_key      = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC/ebtwCpb9cWRtc29HqhB4bx0RT8qYCY/twqMe5pPFuEir/tT/RwAQS8Jc5flo/XXDbLZRD63yurbr8g7SpfenzkF22bODR0UfXYbz1GgULIyIt49npMIlg1OKBr81kE3mktQXrRy0ARVegKff1I+x7cEp5ct412ybHEUtzHKU5DLiYqe/w7bIVwJKmjkni46tJY+3C8c1RrmCOMCQGsCuKRN2/h7IGE4spKavZh38I9QNcmHbaMmxqXVTtfHl3vulrDlEyrar3UjRpOlbzYV+Ndvto0o1c2zUdQmKiVc3FRUJluu47XLSRex8Ziom7Z84lOG+jBcLlnAuYF6c2tJ+66qRcntOjLWFimJpwi/CpL46rhKybdFpGlRStFJfXroQhi38mSA6CJeoQxKbe5tIQcavmv4Lv9yFpPN2jnSCkcDWfp/yK1ngQhuqU+B07/btNkHxs5FlLKXZ6AO2TZ5zzS8HYNLjQ5TLRD0W+ECOH30nqvpR6OluAGbGQwAp/d92EGQeZGxbqBs6yOg+pgiUITJ210qMF5pBy7m5dJBjRiF15oqzEZgOPCydw6Nk3tgcIK+8IygdaSmEbv7dKeCQJntMIfmxd3d+DknofuW3h2JvW1efmNoHq/aWs6csK4Lc1u9zmksIFBN1EeDsnAgischjEUXU9ujJ3wdBHkSk5Q== maharshi.bhatnagar@clouddrove.com"
+  public_key      = "ssh-rsa AAAA"
   admin_username  = "ubuntu"
   caching         = "ReadWrite"
   disk_size_gb    = 30
