@@ -45,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - 2023-02-14
 ### :sparkles: New Features
-- [`0baa7cc`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/0baa7ccd9b6243bbcd910894aae28f1771cbd303) - Added disk encryption added with cmk and host encryption Argument 
+- [`0baa7cc`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/0baa7ccd9b6243bbcd910894aae28f1771cbd303) - Added disk encryption added with cmk and host encryption Argument
 
 ## [1.0.1] - 2023-01-24
 ### :sparkles: New Features
