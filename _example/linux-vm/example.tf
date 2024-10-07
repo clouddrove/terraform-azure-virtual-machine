@@ -119,7 +119,7 @@ module "key_vault" {
 }
 
 ##-----------------------------------------------------------------------------
-## log-analytics module call for diagnosis setting 
+## log-analytics module call for diagnosis setting
 #-----------------------------------------------------------------------------
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
