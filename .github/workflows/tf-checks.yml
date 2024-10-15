@@ -8,10 +8,10 @@ jobs:
   linux-vm-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.8
     with:
-      working_directory: './_example/linux-vm/'
+      working_directory: './examples/linux-vm/'
 
   windows-vm-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.8
     with:
-      working_directory: './_example/windows-vm/'
+      working_directory: './examples/windows-vm/'
 
