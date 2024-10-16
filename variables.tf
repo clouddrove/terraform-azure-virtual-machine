@@ -14,8 +14,8 @@ variable "environment" {
 
 variable "managedby" {
   type        = string
-  default     = "anmol@clouddrove.com"
-  description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
+  default     = "hello@clouddrove.com"
+  description = "ManagedBy, eg 'CloudDrove'."
 }
 
 variable "label_order" {
@@ -128,7 +128,7 @@ variable "private_ip_address_allocation" {
 
 variable "primary" {
   type        = bool
-  default     = false
+  default     = true
   description = "Is this the Primary IP Configuration? Must be true for the first ip_configuration when multiple are specified. Defaults to false."
 }
 
@@ -609,6 +609,6 @@ variable "user_object_id" {
 }
 variable "user_data" {
   type        = string
-  default     = "path/to/user-data.sh" // Adjust this path accordingly
-  description = "(Optional) A string of the desired User Data for the vm."
+  default     = null // Adjust this path accordingly
+  description = "(Optional) A string of the desired User Data for the vm.(path/to/user-data.sh)"
 }
