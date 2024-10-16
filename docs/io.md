@@ -58,7 +58,7 @@
 | log\_analytics\_workspace\_id | n/a | `string` | `null` | no |
 | machine\_count | Number of Virtual Machines to create. | `number` | `1` | no |
 | managed | Specifies whether the availability set is managed or not. Possible values are true (to specify aligned) or false (to specify classic). Default is true. | `bool` | `true` | no |
-| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | `string` | `"anmol@clouddrove.com"` | no |
+| managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | metric\_enabled | Is this Diagnostic Metric enabled? Defaults to true. | `bool` | `true` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | network\_interface\_sg\_enabled | Whether network interface security group is enabled. | `bool` | `false` | no |
@@ -72,7 +72,7 @@
 | plan\_publisher | Specifies the publisher of the image. | `string` | `""` | no |
 | platform\_fault\_domain\_count | Specifies the number of fault domains that are used. Defaults to 3. | `number` | `3` | no |
 | platform\_update\_domain\_count | Specifies the number of update domains that are used. Defaults to 5. | `number` | `5` | no |
-| primary | Is this the Primary IP Configuration? Must be true for the first ip\_configuration when multiple are specified. Defaults to false. | `bool` | `false` | no |
+| primary | Is this the Primary IP Configuration? Must be true for the first ip\_configuration when multiple are specified. Defaults to false. | `bool` | `true` | no |
 | private\_ip\_address\_allocation | The allocation method used for the Private IP Address. Possible values are Dynamic and Static. | `string` | `"Static"` | no |
 | private\_ip\_address\_version | The IP Version to use. Possible values are IPv4 or IPv6. Defaults to IPv4. | `string` | `"IPv4"` | no |
 | private\_ip\_addresses | The Static IP Address which should be used. | `list(any)` | `[]` | no |
@@ -94,7 +94,7 @@
 | timezone | Specifies the time zone of the virtual machine. | `string` | `""` | no |
 | ultra\_ssd\_enabled | Should Ultra SSD disk be enabled for this Virtual Machine?. | `bool` | `false` | no |
 | update | Used when updating the Resource Group. | `string` | `"60m"` | no |
-| user\_data | (Optional) A string of the desired User Data for the vm. | `string` | `"path/to/user-data.sh"` | no |
+| user\_data | (Optional) A string of the desired User Data for the vm.(path/to/user-data.sh) | `string` | `null` | no |
 | user\_object\_id | The ID of the Principal (User, Group or Service Principal) to assign the Role Definition to. Changing this forces a new resource to be created. | <pre>map(object({<br>    role_definition_name = string<br>    principal_id         = string<br>  }))</pre> | `{}` | no |
 | vm\_addon\_name | The name of the addon Virtual machine's name. | `string` | `null` | no |
 | vm\_availability\_zone | (Optional) Specifies the Availability Zone in which this Virtual Machine should be located. Changing this forces a new Virtual Machine to be created. | `any` | `null` | no |
