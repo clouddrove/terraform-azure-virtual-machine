@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2024-10-16
+### :sparkles: New Features
+- [`10dd303`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/10dd3039862c15ab93221fd12da3eb1e89acffda) - add user data attribute *(commit by [@Rupalgw](https://github.com/Rupalgw))*
+
+### :bug: Bug Fixes
+- [`c562607`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/c5626073c5a115830f8d4666873ded477f33c920) - change in count condition *(commit by [@Rupalgw](https://github.com/Rupalgw))*
+- [`5573b10`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/5573b10d7fa87204bdf2ded2509a2f915dd25be7) - Update public key for SSH access *(commit by [@Rupalgw](https://github.com/Rupalgw))*
+- [`c498b7d`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/c498b7df396c64c01e56a0936d341ab920b960a6) - issue of variable hardcoding *(commit by [@Rupalgw](https://github.com/Rupalgw))*
+- [`125e4c0`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/125e4c0572ff5fa6a9d16b16bb7637efbfa2e8f5) - Remove network interface enable_accelerated_networking and enable_ip_forwarding deprecation *(commit by [@13archit](https://github.com/13archit))*
+- [`cef5ce5`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/cef5ce52fd0a26ca5473d0586f2da04c2b992381) - Update version.tf for windows example *(commit by [@13archit](https://github.com/13archit))*
+- [`b77d51a`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/b77d51a0732143e95bf8521e9eba88b36cca74bf) - Update azurerm version >=3.112.0 *(PR [#69](https://github.com/clouddrove/terraform-azure-virtual-machine/pull/69) by [@NotMaharshi](https://github.com/NotMaharshi))*
+- [`bae863c`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/bae863c1a62a5f5b7f373473ea572681e03c4746) - Update azurerm version to >=3.108.0 *(commit by [@13archit](https://github.com/13archit))*
+
+### :construction_worker: Build System
+- [`3452230`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/345223049ed24268c54abbf5555dee9b3aec0e03) - **deps**: bump clouddrove/github-shared-workflows from 1.2.2 to 1.2.4 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`af79cbd`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/af79cbdb9df80f0228629e2dcbfbd1a53b6664e5) - **deps**: bump clouddrove/github-shared-workflows from 1.2.4 to 1.2.5 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`c1ba284`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/c1ba2849a6acc05cc8f5ddc8c3e64e5a32168f30) - **deps**: bump clouddrove/github-shared-workflows from 1.2.5 to 1.2.7 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`c4ad1d5`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/c4ad1d50a551816089c4d6d268c445a3f2531624) - **deps**: bump clouddrove/key-vault/azure in /_example/linux-vm *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`41bbf80`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/41bbf8052f5fdd6a9f2b908329b710cdc388c565) - **deps**: bump clouddrove/github-shared-workflows from 1.2.7 to 1.2.8 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+### :memo: Documentation Changes
+- [`b351a05`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/b351a05088faf56ecbd865b64de6d988c4fac7ae) - update CHANGELOG.md for 2.0.0 *(commit by [@clouddrove-ci](https://github.com/clouddrove-ci))*
+
+
 ## [2.0.0] - 2024-04-08
 ### :bug: Bug Fixes
 - [`7235597`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/7235597efdf3cb28e6fcc5a27b24729388483937) - add default value in variable.tf *(commit by [@themaheshyadav](https://github.com/themaheshyadav))*
@@ -66,3 +90,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.0.6]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.5...1.0.6
 [2.0.0]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.3...2.0.0
+[2.0.1]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.0...2.0.1
