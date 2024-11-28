@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.2] - 2024-11-28
+### :bug: Bug Fixes
+- [`b2270b5`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/b2270b5c03d64305d10e6eeaab5b0787f3081140) - network interface output condition *(commit by [@d4kverma](https://github.com/d4kverma))*
+
+### :construction_worker: Build System
+- [`0e6107d`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/0e6107dc269b8346dd738b857fd63c2e79343c3f) - **deps**: bump clouddrove/log-analytics/azure in /examples/linux-vm *(PR [#72](https://github.com/clouddrove/terraform-azure-virtual-machine/pull/72) by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+### :memo: Documentation Changes
+- [`046ccec`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/046ccec15e442b3bd111d4a30e598937c64f5a9a) - update CHANGELOG.md for 2.0.1 *(commit by [@clouddrove-ci](https://github.com/clouddrove-ci))*
+
+
 ## [2.0.1] - 2024-10-16
 ### :sparkles: New Features
 - [`10dd303`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/10dd3039862c15ab93221fd12da3eb1e89acffda) - add user data attribute *(commit by [@Rupalgw](https://github.com/Rupalgw))*
@@ -91,3 +102,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [1.0.6]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.5...1.0.6
 [2.0.0]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/1.0.3...2.0.0
 [2.0.1]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.0...2.0.1
+[2.0.2]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.1...2.0.2
