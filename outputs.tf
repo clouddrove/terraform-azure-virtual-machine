@@ -1,5 +1,5 @@
 output "network_interface_id" {
-  value       = try(azurerm_network_interface.default[*].id, null)
+  value       = azurerm_network_interface.default[*].id
   description = "The ID of the Network Interface."
 }
 
