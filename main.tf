@@ -492,29 +492,26 @@ resource "azurerm_backup_policy_vm" "policy" {
   }
 
   dynamic "retention_daily" {
-    for_each = var.backup_policy_retention_daily_count != "" && var.enable_retention_daily == true ? [1] : []
-
+    for_each = var.backup_policy_retention["daily"].enabled ? [1] : []
     content {
-      count = var.backup_policy_retention_daily_count
+      count = var.backup_policy_retention["daily"].count
     }
   }
 
   dynamic "retention_weekly" {
-    for_each = var.backup_polcy_retention_weekly_count != "" && var.enable_retention_weekly == true ? [1] : []
-
+    for_each = var.backup_policy_retention["weekly"].enabled ? [1] : []
     content {
-      count    = var.backup_polcy_retention_weekly_count
-      weekdays = var.backup_policy_retention_weekly_weekdays != null ? var.backup_policy_retention_weekly_weekdays : ["Saturday"]
+      count    = var.backup_policy_retention["weekly"].count
+      weekdays = var.backup_policy_retention["weekly"].weekdays
     }
   }
 
   dynamic "retention_monthly" {
-    for_each = var.backup_polcy_retention_monthly_count != "" && var.enable_retention_monthly == true ? [1] : []
-
+    for_each = var.backup_policy_retention["monthly"].enabled ? [1] : []
     content {
-      count    = var.backup_polcy_retention_monthly_count
-      weekdays = var.backup_policy_retention_monthly_weekdays != null ? var.backup_policy_retention_monthly_weekdays : ["Saturday"]
-      weeks    = ["Last"]
+      count    = var.backup_policy_retention["monthly"].count
+      weekdays = var.backup_policy_retention["monthly"].weekdays
+      weeks    = var.backup_policy_retention["monthly"].weeks
     }
   }
 

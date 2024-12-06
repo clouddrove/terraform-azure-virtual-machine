@@ -170,17 +170,17 @@ module "virtual-machine" {
   ## Public IP
   public_ip_enabled = true
   ## Virtual Machine
-  vm_size         = "Standard_B1s"
-  public_key      = "ssh-rsa AAAA"
-  admin_username  = "ubuntu"
-  admin_password  = "Test1234@"
-  caching         = "ReadWrite"
-  disk_size_gb    = 30
-  image_publisher = "Canonical"
-  image_offer     = "0001-com-ubuntu-server-jammy"
-  image_sku       = "22_04-lts-gen2"
-  image_version   = "latest"
-
+  vm_size                    = "Standard_B1s"
+  public_key                 = "ssh-rsa AAAA"
+  admin_username             = "ubuntu"
+  admin_password             = "Test1234@"
+  caching                    = "ReadWrite"
+  disk_size_gb               = 30
+  image_publisher            = "Canonical"
+  image_offer                = "0001-com-ubuntu-server-jammy"
+  image_sku                  = "22_04-lts-gen2"
+  image_version              = "latest"
+  backup_enabled             = true
   enable_disk_encryption_set = true
   key_vault_id               = module.key_vault.id
   data_disks = [
@@ -206,10 +206,4 @@ module "virtual-machine" {
 
   #vm With User Data
   user_data = base64encode(file("user-data.sh"))
-  # (Optional) Indicate the fequency to use for the backup policy
-  backup_policy_frequency = "Daily"
-  # (Optional) Indicates the time for when to execute the backup policy
-  backup_policy_time = "18:00"
-  # (Optional) Indicates the number of daily backups to retain (set to blank to disable)
-  backup_policy_retention_daily_count = 30
 }
