@@ -465,7 +465,7 @@ resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
 
 
 resource "azurerm_recovery_services_vault" "example" {
-  count                         = var.enabled ? var.machine_count : 0
+  count                         = var.enabled && var.backup_enabled ? var.machine_count : 0
   name                          = format("%s-service-vault", module.labels.id)
   location                      = var.location
   resource_group_name           = var.resource_group_name
@@ -478,7 +478,7 @@ resource "azurerm_recovery_services_vault" "example" {
 }
 
 resource "azurerm_backup_policy_vm" "policy" {
-  count               = var.enabled ? var.machine_count : 0
+  count               = var.enabled && var.backup_enabled ? var.machine_count : 0
   name                = format("%s-policy-vm", module.labels.id)
   resource_group_name = var.resource_group_name
   recovery_vault_name = azurerm_recovery_services_vault.example[0].name
@@ -521,7 +521,7 @@ resource "azurerm_backup_policy_vm" "policy" {
 }
 
 resource "azurerm_backup_protected_vm" "example" {
-  count               = var.enabled ? var.machine_count : 0
+  count               = var.enabled && var.backup_enabled ? var.machine_count : 0
   resource_group_name = var.resource_group_name
   recovery_vault_name = azurerm_recovery_services_vault.example[0].name
   backup_policy_id    = azurerm_backup_policy_vm.policy[0].id
