@@ -723,5 +723,6 @@ variable "enable_retention_monthly" {
 
 variable "backup_enabled" {
   description = "Added Backup Policy and Service Vault for the Virtual Machine"
-
+  type        = bool
+  default     = false
 }
