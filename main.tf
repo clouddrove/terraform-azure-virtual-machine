@@ -462,3 +462,68 @@ resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
     ignore_changes = [log_analytics_destination_type]
   }
 }
+
+
+resource "azurerm_recovery_services_vault" "example" {
+  count                         = var.enabled ? var.machine_count : 0
+  name                          = format("%s-service-vault", module.labels.id)
+  location                      = var.location
+  resource_group_name           = var.resource_group_name
+  sku                           = var.vault_sku
+  tags                          = module.labels.tags
+  public_network_access_enabled = var.public_network_access_enabled
+  identity {
+    type = "SystemAssigned"
+  }
+}
+
+resource "azurerm_backup_policy_vm" "policy" {
+  count               = var.enabled ? var.machine_count : 0
+  name                = format("%s-policy-vm", module.labels.id)
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = azurerm_recovery_services_vault.example[0].name
+  policy_type         = var.backup_policy_type != null ? var.backup_policy_type : "V2"
+
+  timezone = var.backup_policy_time_zone != null ? var.backup_policy_time_zone : "UTC"
+
+  backup {
+    frequency = var.backup_policy_frequency != null ? var.backup_policy_frequency : "Daily"
+    time      = var.backup_policy_time != null ? var.backup_policy_time : "23:00"
+  }
+
+  dynamic "retention_daily" {
+    for_each = var.backup_policy_retention_daily_count != "" && var.enable_retention_daily == true ? [1] : []
+
+    content {
+      count = var.backup_policy_retention_daily_count
+    }
+  }
+
+  dynamic "retention_weekly" {
+    for_each = var.backup_polcy_retention_weekly_count != "" && var.enable_retention_weekly == true ? [1] : []
+
+    content {
+      count    = var.backup_polcy_retention_weekly_count
+      weekdays = var.backup_policy_retention_weekly_weekdays != null ? var.backup_policy_retention_weekly_weekdays : ["Saturday"]
+    }
+  }
+
+  dynamic "retention_monthly" {
+    for_each = var.backup_polcy_retention_monthly_count != "" && var.enable_retention_monthly == true ? [1] : []
+
+    content {
+      count    = var.backup_polcy_retention_monthly_count
+      weekdays = var.backup_policy_retention_monthly_weekdays != null ? var.backup_policy_retention_monthly_weekdays : ["Saturday"]
+      weeks    = ["Last"]
+    }
+  }
+
+}
+
+resource "azurerm_backup_protected_vm" "example" {
+  count               = var.enabled ? var.machine_count : 0
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = azurerm_recovery_services_vault.example[0].name
+  backup_policy_id    = azurerm_backup_policy_vm.policy[0].id
+  source_vm_id        = var.is_vm_linux ? azurerm_linux_virtual_machine.default[count.index].id : azurerm_windows_virtual_machine.win_vm[count.index].id
+}

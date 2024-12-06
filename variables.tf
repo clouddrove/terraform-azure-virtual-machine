@@ -249,7 +249,7 @@ variable "license_type" {
 
 variable "disable_password_authentication" {
   type        = bool
-  default     = true
+  default     = false
   description = "Specifies whether password authentication should be disabled."
 }
 
@@ -611,4 +611,112 @@ variable "user_data" {
   type        = string
   default     = null // Adjust this path accordingly
   description = "(Optional) A string of the desired User Data for the vm.(path/to/user-data.sh)"
+}
+
+variable "public_network_access_enabled" {
+  default = true
+  type    = bool
+}
+
+variable "vault_sku" {
+  default = "Standard"
+  type    = string
+}
+
+variable "alert_job_failure" {
+  default = false
+  type    = bool
+}
+
+variable "critical_operation_failture" {
+  default = false
+  type    = bool
+}
+
+variable "backup_policy_time" {
+  description = "(Optional) Indicates the time for when to execute the backup policy"
+  default     = "23:00"
+}
+
+variable "backup_policy_retention_daily_count" {
+  description = "(Optional) Indicates the number of daily backups to retain (set to blank to disable)"
+  type        = number
+  default     = null
+}
+
+variable "backup_polcy_retention_weekly_count" {
+  description = "(Optional) Indicates the number of weekly backups to retain (set to blank to disable)"
+  type        = number
+  default     = null
+}
+
+variable "backup_policy_retention_weekly_weekdays" {
+  description = "(Optional) Indicates which days of the week the weekly backup will be taken"
+  type        = set(string)
+  default     = ["Saturday"]
+
+  validation {
+    condition     = can([for s in var.backup_policy_retention_weekly_weekdays : contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], s)])
+    error_message = "The value must contain one of the following: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday"
+  }
+}
+
+variable "backup_polcy_retention_monthly_count" {
+  description = "(Optional) Indicates the number of monthly backups to retain (set to blank to disable)"
+  type        = number
+  default     = null
+}
+
+variable "backup_policy_retention_monthly_weekdays" {
+  description = "(Optional) Indicates which days of the week the monthly backup will be taken"
+  type        = set(string)
+  default     = ["Saturday"]
+
+  validation {
+    condition     = can([for s in var.backup_policy_retention_monthly_weekdays : contains(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"], s)])
+    error_message = "The value must contain one of the following: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday"
+  }
+}
+
+variable "backup_policy_time_zone" {
+  description = "(Optional) Indicates the timezone that the policy will use"
+  default     = "UTC"
+}
+
+variable "backup_policy_frequency" {
+  description = "(Optional) Indicate the fequency to use for the backup policy"
+  default     = "Daily"
+
+  validation {
+    condition     = contains(["Daily"], var.backup_policy_frequency)
+    error_message = "The value must be set to one of the following: Daily"
+  }
+}
+
+variable "backup_policy_type" {
+  description = "(Optional) Indicates which version type to use when creating the backup policy"
+  default     = "V1"
+
+  validation {
+    condition     = contains(["V1", "V2"], var.backup_policy_type)
+    error_message = "The value must be set to one of the following: V1, V2"
+  }
+}
+
+variable "enable_retention_daily" {
+  description = "Flag to enable or disable daily retention."
+  type        = bool
+  default     = true
+}
+
+variable "enable_retention_weekly" {
+  description = "Flag to enable or disable weekly retention."
+  type        = bool
+  default     = false
+}
+
+variable "enable_retention_monthly" {
+  description = "Flag to enable or disable monthly retention."
+  type        = bool
+  default     = false
 }

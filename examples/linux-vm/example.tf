@@ -1,11 +1,11 @@
 provider "azurerm" {
   features {}
-  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+  subscription_id = "068245d4-3c94-42fe-9c4d-9e5e1cabc60c"
 }
 provider "azurerm" {
   features {}
   alias           = "peer"
-  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+  subscription_id = "068245d4-3c94-42fe-9c4d-9e5e1cabc60c"
 }
 
 data "azurerm_client_config" "current_client_config" {}
@@ -134,7 +134,7 @@ module "key_vault" {
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
   version                          = "2.0.0"
-  name                             = "app"
+  name                             = "app1"
   environment                      = "test"
   label_order                      = ["name", "environment"]
   create_log_analytics_workspace   = true
@@ -173,6 +173,7 @@ module "virtual-machine" {
   vm_size         = "Standard_B1s"
   public_key      = "ssh-rsa AAAA"
   admin_username  = "ubuntu"
+  admin_password  = "Test1234@"
   caching         = "ReadWrite"
   disk_size_gb    = 30
   image_publisher = "Canonical"
@@ -204,5 +205,11 @@ module "virtual-machine" {
   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
 
   #vm With User Data
-  user_data = file("user-data.sh")
+  user_data = base64encode(file("user-data.sh"))
+  # (Optional) Indicate the fequency to use for the backup policy
+  backup_policy_frequency = "Daily"
+  # (Optional) Indicates the time for when to execute the backup policy
+  backup_policy_time = "18:00"
+  # (Optional) Indicates the number of daily backups to retain (set to blank to disable)
+  backup_policy_retention_daily_count = 30
 }
