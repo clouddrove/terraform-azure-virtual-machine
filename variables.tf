@@ -699,3 +699,16 @@ variable "backup_policy_retention" {
     }
   }
 }
+
+variable "vault_service" {
+  default     = null
+  type        = string
+  description = "Value for Service Vault ID"
+}
+
+variable "backup_policy" {
+  default     = null
+  type        = string
+  description = "Value for Backup Policy ID"
+
+}
