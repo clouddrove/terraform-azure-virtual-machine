@@ -173,7 +173,6 @@ module "virtual-machine" {
   vm_size                    = "Standard_B1s"
   public_key                 = "ssh-rsa AAAA"
   admin_username             = "ubuntu"
-  admin_password             = "Test1234@"
   caching                    = "ReadWrite"
   disk_size_gb               = 30
   image_publisher            = "Canonical"

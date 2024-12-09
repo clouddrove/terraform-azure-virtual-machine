@@ -249,7 +249,7 @@ variable "license_type" {
 
 variable "disable_password_authentication" {
   type        = bool
-  default     = false
+  default     = true
   description = "Specifies whether password authentication should be disabled."
 }
 
