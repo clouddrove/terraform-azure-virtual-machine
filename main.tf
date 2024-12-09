@@ -466,7 +466,7 @@ resource "azurerm_monitor_diagnostic_setting" "nic_diagnostic" {
 
 resource "azurerm_recovery_services_vault" "example" {
   count                         = var.enabled && var.backup_enabled ? var.machine_count : 0
-  name                          = format("%s-service-vault", module.labels.id)
+  name                          = var.vm_addon_name == null ? format("%s-vm-service-vault-%s", module.labels.id, count.index + 1) : format("vm-%s-service-vault-%s", module.labels.id, var.vm_addon_name)
   location                      = var.location
   resource_group_name           = var.resource_group_name
   sku                           = var.vault_sku
@@ -479,9 +479,9 @@ resource "azurerm_recovery_services_vault" "example" {
 
 resource "azurerm_backup_policy_vm" "policy" {
   count               = var.enabled && var.backup_enabled ? var.machine_count : 0
-  name                = format("%s-policy-vm", module.labels.id)
+  name                = var.vm_addon_name == null ? format("%s-policy-vm-%d", module.labels.id, count.index + 1) : format("%s-policy-vm-%d", module.labels.id, var.vm_addon_name)
   resource_group_name = var.resource_group_name
-  recovery_vault_name = azurerm_recovery_services_vault.example[0].name
+  recovery_vault_name = azurerm_recovery_services_vault.example[count.index].name
   policy_type         = var.backup_policy_type != null ? var.backup_policy_type : "V2"
 
   timezone = var.backup_policy_time_zone != null ? var.backup_policy_time_zone : "UTC"
@@ -520,7 +520,7 @@ resource "azurerm_backup_policy_vm" "policy" {
 resource "azurerm_backup_protected_vm" "example" {
   count               = var.enabled && var.backup_enabled ? var.machine_count : 0
   resource_group_name = var.resource_group_name
-  recovery_vault_name = azurerm_recovery_services_vault.example[0].name
-  backup_policy_id    = azurerm_backup_policy_vm.policy[0].id
+  recovery_vault_name = azurerm_recovery_services_vault.example[count.index].name
+  backup_policy_id    = azurerm_backup_policy_vm.policy[count.index].id
   source_vm_id        = var.is_vm_linux ? azurerm_linux_virtual_machine.default[count.index].id : azurerm_windows_virtual_machine.win_vm[count.index].id
 }

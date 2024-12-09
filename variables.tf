@@ -642,9 +642,10 @@ variable "backup_policy_frequency" {
   type        = string
 
   validation {
-    condition     = contains(["Daily"], var.backup_policy_frequency)
-    error_message = "The value must be set to one of the following: Daily"
+    condition     = contains(["Daily", "Weekly", "Hourly"], var.backup_policy_frequency)
+    error_message = "The value must be set to one of the following: Daily, Weekly, Hourly"
   }
+
 }
 
 variable "backup_policy_type" {
