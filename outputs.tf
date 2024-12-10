@@ -59,15 +59,15 @@ output "extension_id" {
 
 output "service_vault_id" {
   description = "The Principal ID associated with this Managed Service Identity."
-  value       = azurerm_recovery_services_vault.example.principal_id
+  value       = azurerm_recovery_services_vault.example[count.index].principal_id
 }
 
 output "service_vault_tenant_id" {
   description = "The Tenant ID associated with this Managed Service Identity."
-  value       = azurerm_recovery_services_vault.example.tenant_id
+  value       = azurerm_recovery_services_vault.example[count.index].tenant_id
 }
 
 output "vm_backup_policy_id" {
   description = "The ID of the VM Backup Policy."
-  value       = azurerm_backup_policy_vm.policy.id
+  value       = azurerm_backup_policy_vm.policy[count.index].id
 }
