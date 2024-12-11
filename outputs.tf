@@ -56,3 +56,19 @@ output "extension_id" {
   value       = { for id in azurerm_virtual_machine_extension.vm_insight_monitor_agent : id.name => id.id }
   description = "The ID of the Virtual Machine Extension."
 }
+
+output "service_vault_id" {
+  description = "The Principal ID associated with this Managed Service Identity."
+  value       = azurerm_recovery_services_vault.example[*].identity[0].principal_id
+}
+
+output "service_vault_tenant_id" {
+  description = "The Tenant ID associated with this Managed Service Identity."
+  value       = azurerm_recovery_services_vault.example[*].identity[0].tenant_id
+
+}
+
+output "vm_backup_policy_id" {
+  description = "The ID of the VM Backup Policy."
+  value       = azurerm_backup_policy_vm.policy[*].id
+}
