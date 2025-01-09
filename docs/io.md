@@ -8,6 +8,13 @@
 | allocation\_method | Defines the allocation method for this IP address. Possible values are Static or Dynamic. | `string` | `"Static"` | no |
 | allow\_extension\_operations | (Optional) Should Extension Operations be allowed on this Virtual Machine? Defaults to true. | `bool` | `true` | no |
 | availability\_set\_enabled | Whether availability set is enabled. | `bool` | `false` | no |
+| backup\_enabled | Added Backup Policy and Service Vault for the Virtual Machine | `bool` | `false` | no |
+| backup\_policy | Value for Backup Policy ID | `string` | `null` | no |
+| backup\_policy\_frequency | (Optional) Indicate the fequency to use for the backup policy | `string` | `"Daily"` | no |
+| backup\_policy\_retention | n/a | <pre>map(object({<br>    enabled   = bool<br>    frequency = string<br>    count     = string<br>    weekdays  = list(string)<br>    weeks     = list(string)<br>  }))</pre> | <pre>{<br>  "daily": {<br>    "count": "7",<br>    "enabled": true,<br>    "frequency": "Daily",<br>    "weekdays": [],<br>    "weeks": []<br>  },<br>  "monthly": {<br>    "count": "3",<br>    "enabled": false,<br>    "frequency": "Monthly",<br>    "weekdays": [<br>      "Saturday"<br>    ],<br>    "weeks": [<br>      "Last"<br>    ]<br>  },<br>  "weekly": {<br>    "count": "4",<br>    "enabled": false,<br>    "frequency": "Weekly",<br>    "weekdays": [<br>      "Saturday"<br>    ],<br>    "weeks": []<br>  }<br>}</pre> | no |
+| backup\_policy\_time | (Optional) Indicates the time for when to execute the backup policy | `string` | `"23:00"` | no |
+| backup\_policy\_time\_zone | (Optional) Indicates the timezone that the policy will use | `string` | `"UTC"` | no |
+| backup\_policy\_type | (Optional) Indicates which version type to use when creating the backup policy | `string` | `"V1"` | no |
 | blob\_endpoint | The Storage Account's Blob Endpoint which should hold the virtual machine's diagnostic files | `string` | `""` | no |
 | boot\_diagnostics\_enabled | Whether boot diagnostics block is enabled. | `bool` | `false` | no |
 | caching | Specifies the caching requirements for the OS Disk. Possible values include None, ReadOnly and ReadWrite. | `string` | `"ReadWrite"` | no |
@@ -81,6 +88,7 @@
 | public\_ip\_enabled | Whether public IP is enabled. | `bool` | `false` | no |
 | public\_ip\_prefix\_id | If specified then public IP address allocated will be provided from the public IP prefix resource. | `string` | `null` | no |
 | public\_key | Name  (e.g. `ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD3F6tyPEFEzV0LX3X8BsXdMsQ`). | `string` | `null` | no |
+| public\_network\_access\_enabled | n/a | `bool` | `true` | no |
 | read | Used when retrieving the Resource Group. | `string` | `"5m"` | no |
 | repository | Terraform current module repo | `string` | `""` | no |
 | resource\_group\_name | The name of the resource group in which to create the virtual network. | `string` | `""` | no |
@@ -96,6 +104,8 @@
 | update | Used when updating the Resource Group. | `string` | `"60m"` | no |
 | user\_data | (Optional) A string of the desired User Data for the vm.(path/to/user-data.sh) | `string` | `null` | no |
 | user\_object\_id | The ID of the Principal (User, Group or Service Principal) to assign the Role Definition to. Changing this forces a new resource to be created. | <pre>map(object({<br>    role_definition_name = string<br>    principal_id         = string<br>  }))</pre> | `{}` | no |
+| vault\_service | Value for Service Vault ID | `string` | `null` | no |
+| vault\_sku | n/a | `string` | `"Standard"` | no |
 | vm\_addon\_name | The name of the addon Virtual machine's name. | `string` | `null` | no |
 | vm\_availability\_zone | (Optional) Specifies the Availability Zone in which this Virtual Machine should be located. Changing this forces a new Virtual Machine to be created. | `any` | `null` | no |
 | vm\_identity\_type | The Managed Service Identity Type of this Virtual Machine. Possible values are SystemAssigned and UserAssigned. | `string` | `"SystemAssigned"` | no |
@@ -117,6 +127,9 @@
 | network\_interface\_sg\_association\_id | The (Terraform specific) ID of the Association between the Network Interface and the Network Interface. |
 | public\_ip\_address | The IP address value that was allocated. |
 | public\_ip\_id | The Public IP ID. |
+| service\_vault\_id | The Principal ID associated with this Managed Service Identity. |
+| service\_vault\_tenant\_id | The Tenant ID associated with this Managed Service Identity. |
 | tags | The tags associated to resources. |
+| vm\_backup\_policy\_id | The ID of the VM Backup Policy. |
 | windows\_virtual\_machine\_id | The ID of the Windows Virtual Machine. |
 
