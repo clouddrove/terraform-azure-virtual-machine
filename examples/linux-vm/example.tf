@@ -134,7 +134,7 @@ module "key_vault" {
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
   version                          = "2.0.0"
-  name                             = "app"
+  name                             = "app1"
   environment                      = "test"
   label_order                      = ["name", "environment"]
   create_log_analytics_workspace   = true
@@ -170,16 +170,15 @@ module "virtual-machine" {
   ## Public IP
   public_ip_enabled = true
   ## Virtual Machine
-  vm_size         = "Standard_B1s"
-  public_key      = "ssh-rsa AAAA"
-  admin_username  = "ubuntu"
-  caching         = "ReadWrite"
-  disk_size_gb    = 30
-  image_publisher = "Canonical"
-  image_offer     = "0001-com-ubuntu-server-jammy"
-  image_sku       = "22_04-lts-gen2"
-  image_version   = "latest"
-
+  vm_size                    = "Standard_B1s"
+  public_key                 = "ssh-rsa AAAA"
+  admin_username             = "ubuntu"
+  caching                    = "ReadWrite"
+  disk_size_gb               = 30
+  image_publisher            = "Canonical"
+  image_offer                = "0001-com-ubuntu-server-jammy"
+  image_sku                  = "22_04-lts-gen2"
+  image_version              = "latest"
   enable_disk_encryption_set = true
   key_vault_id               = module.key_vault.id
   data_disks = [
@@ -204,5 +203,5 @@ module "virtual-machine" {
   log_analytics_workspace_id = module.log-analytics.workspace_id ## when diagnostic_setting_enable enable,  add log analytics workspace id
 
   #vm With User Data
-  user_data = file("user-data.sh")
+  user_data = base64encode(file("user-data.sh"))
 }

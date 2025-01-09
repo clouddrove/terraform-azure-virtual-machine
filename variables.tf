@@ -612,3 +612,103 @@ variable "user_data" {
   default     = null // Adjust this path accordingly
   description = "(Optional) A string of the desired User Data for the vm.(path/to/user-data.sh)"
 }
+
+variable "public_network_access_enabled" {
+  default = true
+  type    = bool
+}
+
+variable "vault_sku" {
+  default = "Standard"
+  type    = string
+}
+
+
+variable "backup_policy_time" {
+  description = "(Optional) Indicates the time for when to execute the backup policy"
+  default     = "23:00"
+  type        = string
+}
+
+variable "backup_policy_time_zone" {
+  description = "(Optional) Indicates the timezone that the policy will use"
+  default     = "UTC"
+  type        = string
+}
+
+variable "backup_policy_frequency" {
+  description = "(Optional) Indicate the fequency to use for the backup policy"
+  default     = "Daily"
+  type        = string
+
+  validation {
+    condition     = contains(["Daily", "Weekly", "Hourly"], var.backup_policy_frequency)
+    error_message = "The value must be set to one of the following: Daily, Weekly, Hourly"
+  }
+
+}
+
+variable "backup_policy_type" {
+  description = "(Optional) Indicates which version type to use when creating the backup policy"
+  default     = "V1"
+  type        = string
+
+  validation {
+    condition     = contains(["V1", "V2"], var.backup_policy_type)
+    error_message = "The value must be set to one of the following: V1, V2"
+  }
+}
+
+
+variable "backup_enabled" {
+  description = "Added Backup Policy and Service Vault for the Virtual Machine"
+  type        = bool
+  default     = false
+}
+
+
+variable "backup_policy_retention" {
+  type = map(object({
+    enabled   = bool
+    frequency = string
+    count     = string
+    weekdays  = list(string)
+    weeks     = list(string)
+  }))
+  default = {
+    daily = {
+      enabled   = true
+      frequency = "Daily"
+      count     = "7"
+      weekdays  = []
+      weeks     = []
+    },
+    weekly = {
+      enabled   = false
+      frequency = "Weekly"
+      count     = "4"
+      weekdays  = ["Saturday"]
+      weeks     = []
+    },
+    monthly = {
+      enabled   = false
+      frequency = "Monthly"
+      count     = "3"
+      weekdays  = ["Saturday"]
+      weeks     = ["Last"]
+    }
+  }
+}
+
+variable "vault_service" {
+  default     = null
+  type        = string
+  description = "Value for Service Vault ID"
+}
+
+variable "backup_policy" {
+  default     = null
+  type        = string
+  description = "Value for Backup Policy ID"
+
+}
