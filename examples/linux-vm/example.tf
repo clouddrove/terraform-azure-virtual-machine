@@ -179,7 +179,6 @@ module "virtual-machine" {
   image_offer                = "0001-com-ubuntu-server-jammy"
   image_sku                  = "22_04-lts-gen2"
   image_version              = "latest"
-  backup_enabled             = true
   enable_disk_encryption_set = true
   key_vault_id               = module.key_vault.id
   data_disks = [
