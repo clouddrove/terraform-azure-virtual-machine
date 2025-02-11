@@ -494,8 +494,8 @@ variable "extensions" {
     extension_type_handler_version = string
     auto_upgrade_minor_version     = bool
     automatic_upgrade_enabled      = bool
-    settings                       = optional(string, "{}")  # Optional, defaults to empty JSON string
-    protected_settings             = optional(string, "{}")  # Optional, defaults to empty JSON string
+    settings                       = optional(string, "{}") # Optional, defaults to empty JSON string
+    protected_settings             = optional(string, "{}") # Optional, defaults to empty JSON string
   }))
 
   default     = []
