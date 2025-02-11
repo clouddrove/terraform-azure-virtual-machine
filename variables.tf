@@ -494,13 +494,14 @@ variable "extensions" {
     extension_type_handler_version = string
     auto_upgrade_minor_version     = bool
     automatic_upgrade_enabled      = bool
-    settings                       = string
-    protected_settings             = string
+    settings                       = optional(string, "{}")  # Optional, defaults to empty JSON string
+    protected_settings             = optional(string, "{}")  # Optional, defaults to empty JSON string
   }))
 
   default     = []
   description = "List of extensions for Azure Virtual Machine"
 }
+
 
 variable "log_analytics_destination_type" {
   type        = string
