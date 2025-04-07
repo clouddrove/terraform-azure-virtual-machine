@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.4] - 2025-04-07
+### :bug: Bug Fixes
+- [`cb5af54`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/cb5af54cc5f2af9662d06c603cafbfe8de8e4fbb) - Fixed Variable Type *(PR [#77](https://github.com/clouddrove/terraform-azure-virtual-machine/pull/77) by [@vedkops](https://github.com/vedkops))*
+
+### :construction_worker: Build System
+- [`3598cc3`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/3598cc3c3802787524a19cf14e9b6d6ec0e5b2ee) - **deps**: bump clouddrove/network-security-group/azure *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`8449a7a`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/8449a7ad370657a18a88d44c554f96582caab36d) - **deps**: bump clouddrove/network-security-group/azure *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`e0af575`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/e0af575d23cf5513f930a7a95b43fb26c204c972) - **deps**: bump clouddrove/github-shared-workflows from 1.2.8 to 1.2.9 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`b56e4a8`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/b56e4a8315ec8ad1e6126250c7e0670cc202ad21) - **deps**: bump clouddrove/github-shared-workflows from 1.2.9 to 1.3.0 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+- [`75936fb`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/75936fb69b7dfd7a16bec78b70c870ebeed52a72) - **deps**: bump clouddrove/github-shared-workflows from 1.3.0 to 1.3.1 *(commit by [@dependabot[bot]](https://github.com/apps/dependabot))*
+
+### :memo: Documentation Changes
+- [`e8adbe0`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/e8adbe0428d8a3838ff90859dd0e953ff267bbb9) - update CHANGELOG.md for 2.0.3 *(commit by [@clouddrove-ci](https://github.com/clouddrove-ci))*
+
+
 ## [2.0.3] - 2025-01-09
 ### :memo: Documentation Changes
 - [`4f76dd6`](https://github.com/clouddrove/terraform-azure-virtual-machine/commit/4f76dd68a6b8bd158234395a8350a6ed3e330704) - update CHANGELOG.md for 2.0.2 *(commit by [@clouddrove-ci](https://github.com/clouddrove-ci))*
@@ -109,3 +124,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.0.1]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.0...2.0.1
 [2.0.2]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.1...2.0.2
 [2.0.3]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.2...2.0.3
+[2.0.4]: https://github.com/clouddrove/terraform-azure-virtual-machine/compare/2.0.3...2.0.4
