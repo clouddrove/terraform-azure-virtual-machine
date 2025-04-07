@@ -41,7 +41,7 @@
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | eventhub\_authorization\_rule\_id | Specifies the ID of an Event Hub Namespace Authorization Rule used to send Diagnostics Data. | `string` | `null` | no |
 | eventhub\_name | Specifies the name of the Event Hub where Diagnostics Data should be sent. | `string` | `null` | no |
-| extensions | List of extensions for azure virtual machine | `list(any)` | `[]` | no |
+| extensions | List of extensions for Azure Virtual Machine | <pre>list(object({<br>    extension_publisher            = string<br>    extension_name                 = string<br>    extension_type                 = string<br>    extension_type_handler_version = string<br>    auto_upgrade_minor_version     = bool<br>    automatic_upgrade_enabled      = bool<br>    settings                       = optional(string, "{}") # Optional, defaults to empty JSON string<br>    protected_settings             = optional(string, "{}") # Optional, defaults to empty JSON string<br>  }))</pre> | `[]` | no |
 | identity\_enabled | Whether identity block is enabled. | `bool` | `true` | no |
 | identity\_ids | Specifies a list of user managed identity ids to be assigned to the VM. | `list(any)` | `[]` | no |
 | idle\_timeout\_in\_minutes | Specifies the timeout for the TCP idle connection. The value can be set between 4 and 60 minutes. | `number` | `10` | no |
