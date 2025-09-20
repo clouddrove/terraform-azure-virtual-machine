@@ -99,7 +99,7 @@ module "key_vault" {
     azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
     azurerm.main_sub = azurerm
   }
-  version                     = "1.2.0"
+  version                     = "1.3.1"
   name                        = "vae59d6058"
   environment                 = "test"
   label_order                 = ["name", "environment", ]
